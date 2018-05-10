@@ -3,8 +3,13 @@
   "version": "0.0.0",
   "description": "",
   "license": "CC0-1.0",
+  "scripts": {
+    "build": "next build && next export",
+    "deploy": "next build && next export && gh-pages -d out"
+  },
   "dependencies": {
     "bootstrap": "^4.1.1",
+    "date-fns": "^1.29.0",
     "esri-leaflet": "^2.1.4",
     "font-awesome": "^4.7.0",
     "glyphicons": "^0.2.0",
@@ -20,9 +25,10 @@
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.7.0",
+    "gh-pages": "^1.1.0",
     "prettier": "^1.12.1"
   }
 }

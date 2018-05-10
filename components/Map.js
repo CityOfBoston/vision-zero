@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FeatureCounts from '../components/FeatureCounts';
+import { format } from 'date-fns';
 
 // We can't import these server-side because they require "window"
 const L = process.browser ? require('leaflet') : null;
@@ -26,11 +27,19 @@ class Map extends React.Component {
 
   // Set popup for features
   bindPopUp = (feature, layer) => {
+    // format dispatch timestamp to be readable
+    const formattedDate = format(
+      feature.properties.dispatch_ts,
+      'YYYY-MM-HH hh:mm:ss'
+    );
+
     // Assemble the HTML for the markers' popups (Leaflet's bindPopup method doesn't accept React JSX)
-    const popupContent = `<div style="font-family:'Roboto'"><p>Crash Type: ${
+    const popupContent = `<div style="font-family:'Roboto'"><p><strong>Crash Type:</strong> ${
       feature.properties.mode_type
-    }<br>Dispatch Time Stamp: ${feature.properties.dispatch_ts}
-    <br>Location Type: ${feature.properties.location_type}</p></div>`;
+    }<br><strong>Dispatch Time Stamp:</strong> ${formattedDate}
+    <br><strong>Location Type:</strong> ${
+      feature.properties.location_type
+    }</p></div>`;
 
     // Add our popups to the features
     layer.bindPopup(popupContent);
@@ -56,7 +65,8 @@ class Map extends React.Component {
 
   updateFeatures = query => {
     this.featureLayer.setWhere(query, () => {
-      const numFeatures = Object.keys(this.featureLayer._layers).length;
+      // use _currentSnapshot to update the feature count after re-setting the map
+      const numFeatures = this.featureLayer._currentSnapshot.length;
       this.setState({ crashCounts: numFeatures });
     });
   };
@@ -121,15 +131,16 @@ class Map extends React.Component {
       .where('1=1')
       .orderBy('dispatch_ts', 'DESC')
       .run((error, featureCollection) => {
-        const mostRecent = new Date(
+        if (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+          return;
+        }
+        const mostRecentFeature = new Date(
           featureCollection.features[0].properties.dispatch_ts
         );
-        const month = mostRecent.getMonth();
-        const year = mostRecent.getFullYear();
-        const lastUpdate = month + 1 + '/' + year;
-        error
-          ? console.error(error)
-          : this.setState({ lastUpdatedDate: lastUpdate });
+        const lastUpdate = format(mostRecentFeature, 'MM/YYYY');
+        this.setState({ lastUpdatedDate: lastUpdate });
       });
   }
 
