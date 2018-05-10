@@ -84,15 +84,15 @@ class Map extends React.Component {
     // Load in icons for symbology
     const icons = {
       ped: new L.Icon({
-        iconUrl: '../static/marker-11-red.svg',
+        iconUrl: './static/marker-11-red.svg',
         iconSize: [20, 20],
       }),
       mv: new L.Icon({
-        iconUrl: '../static/marker-11-blue.svg',
+        iconUrl: './static/marker-11-blue.svg',
         iconSize: [20, 20],
       }),
       bike: new L.Icon({
-        iconUrl: '../static/marker-11-yellow.svg',
+        iconUrl: './static/marker-11-yellow.svg',
         iconSize: [20, 20],
       }),
     };
