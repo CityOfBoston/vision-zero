@@ -24,7 +24,7 @@ export default class IndexPage extends React.Component {
               className="p-2"
             >
               <img
-                src="../static/VisionZeroLogo.png"
+                src="./static/VisionZeroLogo.png"
                 style={{ width: '10em' }}
               />
             </NavbarBrand>

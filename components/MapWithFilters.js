@@ -136,7 +136,7 @@ export default class MapWithFilters extends React.Component {
                 <CardTitle className="m-2">Legend</CardTitle>
                 <Row>
                   <img
-                    src="../static/marker-11-red.svg"
+                    src="./static/marker-11-red.svg"
                     width="20px"
                     height="20px"
                     className="ml-4"
@@ -145,7 +145,7 @@ export default class MapWithFilters extends React.Component {
                 </Row>
                 <Row>
                   <img
-                    src="../static/marker-11-yellow.svg"
+                    src="./static/marker-11-yellow.svg"
                     width="20px"
                     height="20px"
                     className="ml-4"
@@ -154,7 +154,7 @@ export default class MapWithFilters extends React.Component {
                 </Row>
                 <Row>
                   <img
-                    src="../static/marker-11-blue.svg"
+                    src="./static/marker-11-blue.svg"
                     width="20px"
                     height="20px"
                     className="ml-4"
@@ -164,19 +164,19 @@ export default class MapWithFilters extends React.Component {
               </Card>
               <Row className="mt-2 ml-1 align-middle">
                 <img
-                  src="../static/emsSeal.png"
+                  src="./static/emsSeal.png"
                   width="50px"
                   height="50px"
                   className="p-1"
                 />
                 <img
-                  src="../static/bpdSeal.jpg"
+                  src="./static/bpdSeal.jpg"
                   width="50px"
                   height="55px"
                   className="p-1"
                 />
                 <img
-                  src="../static/gisSeal.jpg"
+                  src="./static/gisSeal.jpg"
                   width="50px"
                   height="50px"
                   className="p-1"
