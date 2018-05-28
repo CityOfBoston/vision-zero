@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 export default class Layout extends React.Component {
   render() {
     return (
+      // create div for page content with height of the entire veiw port
       <div>
         <Head>
           <title> {this.props.title} </title>
@@ -25,13 +26,20 @@ export default class Layout extends React.Component {
             content="width=device-width, initial-scale=1.0"
           />
         </Head>
+
+        {/* Make sure the heigh of the body element is the entire view port */}
         <style global jsx>{`
           @import url('https://fonts.googleapis.com/css?family=Roboto:400,600');
           body {
             font-family: 'Roboto';
+            min-height: 100vh;
+            position: relative;
+            margin: 0;
           }
         `}</style>
+
         {this.props.children}
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/reactstrap/6.0.1/reactstrap.full.min.js" />
       </div>
     );

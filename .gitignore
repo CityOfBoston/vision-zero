@@ -25,3 +25,4 @@ chrome-user-data
 .next/
 todo.txt
 out/
+.vscode/
