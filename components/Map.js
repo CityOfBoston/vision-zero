@@ -25,55 +25,20 @@ class Map extends React.Component {
     };
   }
 
-  // Set popup for features
-  bindPopUp = (feature, layer) => {
-    // format dispatch timestamp to be readable
-    const formattedDate = format(
-      feature.properties.dispatch_ts,
-      'YYYY-MM-HH hh:mm:ss'
-    );
+  map = null;
 
-    // Assemble the HTML for the markers' popups (Leaflet's bindPopup method doesn't accept React JSX)
-    const popupContent = `<div style="font-family:'Roboto'"><p><strong>Crash Type:</strong> ${
-      feature.properties.mode_type
-    }<br><strong>Dispatch Time Stamp:</strong> ${formattedDate}
-    <br><strong>Location Type:</strong> ${
-      feature.properties.location_type
-    }</p></div>`;
+  setMapEl = el => {
+    if (this.map) {
+      this.map.remove();
+      this.map = null;
+    }
 
-    // Add our popups to the features
-    layer.bindPopup(popupContent);
-  };
+    if (!el) {
+      return;
+    }
 
-  makeFeaturesQuery = (modeSelection, fromDate, toDate) => {
-    // set query for when "all" modes are selected
-    const allModesSelected = `dispatch_ts >=
-    '${fromDate}' AND 
-    dispatch_ts <= '${toDate}'`;
-
-    // set query for when one mode is selected
-    const oneModeSelected = `mode_type =
-    '${modeSelection}' AND 
-    dispatch_ts >= '${fromDate}'AND 
-    dispatch_ts <= '${toDate}'`;
-
-    return {
-      allModesSelected,
-      oneModeSelected,
-    };
-  };
-
-  updateFeatures = query => {
-    this.featureLayer.setWhere(query, () => {
-      // use _currentSnapshot to update the feature count after re-setting the map
-      const numFeatures = this.featureLayer._currentSnapshot.length;
-      this.setState({ crashCounts: numFeatures });
-    });
-  };
-
-  componentDidMount() {
-    // Create map
-    this.map = L.map('map', {
+    // Bind leaflet map to html element
+    this.map = L.map(el, {
       center: [42.318432, -71.079687],
       zoom: 12,
     });
@@ -97,6 +62,7 @@ class Map extends React.Component {
       }),
     };
 
+    // Add feature layer
     this.featureLayer = featureLayer({
       url: feature_service_url,
       pointToLayer: function(geojson, latlng) {
@@ -108,7 +74,7 @@ class Map extends React.Component {
     });
 
     // Set features to load based on the default from and to dates
-    const { allModesSelected } = this.makeFeaturesQuery(
+    const { allModesSelected } = this.props.makeFeaturesQuery(
       this.props.modeSelection,
       this.props.fromDate,
       this.props.toDate
@@ -142,10 +108,11 @@ class Map extends React.Component {
         const lastUpdate = format(mostRecentFeature, 'MM/YYYY');
         this.setState({ lastUpdatedDate: lastUpdate });
       });
-  }
+  };
 
+  // Update query and features when new selections are made
   componentWillReceiveProps({ modeSelection, fromDate, toDate }) {
-    const { allModesSelected, oneModeSelected } = this.makeFeaturesQuery(
+    const { allModesSelected, oneModeSelected } = this.props.makeFeaturesQuery(
       modeSelection,
       fromDate,
       toDate
@@ -164,10 +131,39 @@ class Map extends React.Component {
     }
   }
 
+  // Update features when user makes new selections
+  updateFeatures = query => {
+    this.featureLayer.setWhere(query, () => {
+      // use _currentSnapshot to update the feature count after re-setting the map
+      const numFeatures = this.featureLayer._currentSnapshot.length;
+      this.setState({ crashCounts: numFeatures });
+    });
+  };
+
+  // Set popup for features
+  bindPopUp = (feature, layer) => {
+    // Format dispatch timestamp to be readable
+    const formattedDate = format(
+      feature.properties.dispatch_ts,
+      'YYYY-MM-HH hh:mm:ss'
+    );
+
+    // Assemble the HTML for the markers' popups (Leaflet's bindPopup method doesn't accept React JSX)
+    const popupContent = `<div style="font-family:'Roboto'"><p><strong>Crash Type:</strong> ${
+      feature.properties.mode_type
+    }<br><strong>Dispatch Time Stamp:</strong> ${formattedDate}
+          <br><strong>Location Type:</strong> ${
+            feature.properties.location_type
+          }</p></div>`;
+
+    // Add our popups to the features
+    layer.bindPopup(popupContent);
+  };
+
   render() {
     return (
       <div>
-        <div style={{ height: '600px' }} id="map">
+        <div style={{ height: '100vh' }} ref={this.setMapEl}>
           <div
             style={{ zIndex: 1000, position: 'relative', fontFamily: 'Roboto' }}
           >
@@ -182,10 +178,11 @@ class Map extends React.Component {
   }
 }
 
+export default Map;
+
 Map.propTypes = {
-  modeSelection: PropTypes.string,
   fromDate: PropTypes.string,
   toDate: PropTypes.string,
+  modeSelection: PropTypes.string,
+  makeFeaturesQuery: PropTypes.func,
 };
-
-export default Map;

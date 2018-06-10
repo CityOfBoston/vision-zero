@@ -24,3 +24,5 @@ chrome-user-data
 *.swo
 .next/
 todo.txt
+out/
+.vscode/

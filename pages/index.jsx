@@ -2,7 +2,6 @@ import React from 'react';
 import Layout from '../components/Layout';
 import {
   Col,
-  Row,
   Navbar,
   NavbarBrand,
   Nav,
@@ -10,7 +9,7 @@ import {
   NavLink,
   TabContent,
 } from 'reactstrap';
-import MapWithFilters from '../components/MapWithFilters';
+import MapContainer from '../components/MapContainer';
 
 export default class IndexPage extends React.Component {
   render() {
@@ -37,11 +36,9 @@ export default class IndexPage extends React.Component {
             </Nav>
           </Navbar>
           <TabContent activeTab>
-            <Row>
-              <Col>
-                <MapWithFilters />
-              </Col>
-            </Row>
+            <Col>
+              <MapContainer />
+            </Col>
           </TabContent>
         </div>
       </Layout>
