@@ -41,7 +41,7 @@ class MapContainer extends React.Component {
     // set query for when one mode is selected
     const oneModeSelected = `mode_type =
       '${modeSelection}' AND 
-      dispatch_ts >= '${fromDate}'AND 
+      dispatch_ts >= '${fromDate}' AND 
       dispatch_ts <= '${toDate}'`;
 
     return {

@@ -69,7 +69,7 @@ export default function Filters(props) {
             />
             <Label for="to">To Date:</Label>
             <Input
-              id="from"
+              id="to"
               type="date"
               onChange={props.toChange}
               name="to"
