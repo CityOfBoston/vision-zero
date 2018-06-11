@@ -40,7 +40,7 @@ class Map extends React.Component {
     // Bind leaflet map to html element
     this.map = L.map(el, {
       center: [42.318432, -71.079687],
-      zoom: 12,
+      zoom: 13,
     });
 
     // Set zoom control position

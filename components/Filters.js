@@ -17,14 +17,15 @@ import Modal from '../components/Modal';
 export default function Filters(props) {
   return (
     <div>
-      <Row className="ml-2">
-        <h3 className="mt-3 font-weight-bold">Traffic Crashes</h3>
-        <Modal />
+      <Row className="ml-1">
+        <h5 className="mt-3 font-weight-bold">FILTER CRASHES</h5>
+        {/* <Modal /> */}
       </Row>
-      <Card>
-        <ButtonGroup className="m-2" color="info">
+      <Card className="border-0">
+        <ButtonGroup className="m-1" color="primary">
           <Button
             outline
+            color="primary"
             onClick={() => props.modeChange('mv')}
             active={props.modeSelection === 'mv'}
             className="w-25"
@@ -33,6 +34,7 @@ export default function Filters(props) {
           </Button>
           <Button
             outline
+            color="primary"
             onClick={() => props.modeChange('ped')}
             active={props.modeSelection === 'ped'}
             className="w-25"
@@ -41,6 +43,7 @@ export default function Filters(props) {
           </Button>
           <Button
             outline
+            color="primary"
             onClick={() => props.modeChange('bike')}
             active={props.modeSelection === 'bike'}
             className="w-25"
@@ -49,6 +52,7 @@ export default function Filters(props) {
           </Button>
           <Button
             outline
+            color="primary"
             onClick={() => props.modeChange('all')}
             active={props.modeSelection === 'all'}
             className="w-25"
@@ -56,7 +60,7 @@ export default function Filters(props) {
             All
           </Button>
         </ButtonGroup>
-        <Form className="m-2">
+        <Form className="m-1">
           <FormGroup>
             <Label for="from">From Date:</Label>
             <Input
@@ -65,7 +69,7 @@ export default function Filters(props) {
               onChange={props.fromChange}
               name="from"
               value={props.fromDate}
-              className="mb-1"
+              className="mb-2"
             />
             <Label for="to">To Date:</Label>
             <Input
@@ -78,8 +82,10 @@ export default function Filters(props) {
           </FormGroup>
         </Form>
       </Card>
-      <Card className="mt-2">
-        <CardTitle className="m-2">Legend</CardTitle>
+      <Card className="mt-1 border-0">
+        {/* <CardTitle className="m-2 text-uppercase font-weight-bold">
+          LEGEND
+        </CardTitle> */}
         <Row>
           <img
             src="./static/marker-11-red.svg"
@@ -87,7 +93,7 @@ export default function Filters(props) {
             height="20px"
             className="ml-4"
           />
-          <p>Pedestrian</p>
+          <p>Pedestrian crash</p>
         </Row>
         <Row>
           <img
@@ -96,7 +102,7 @@ export default function Filters(props) {
             height="20px"
             className="ml-4"
           />
-          <p>Bicyclist</p>
+          <p>Bicyclist crash</p>
         </Row>
         <Row>
           <img
@@ -105,10 +111,10 @@ export default function Filters(props) {
             height="20px"
             className="ml-4"
           />
-          <p>Motor Vehicle</p>
+          <p>Motor vehicle crash</p>
         </Row>
       </Card>
-      <Row className="mt-2 ml-1 align-middle">
+      <Row className="mt-1 ml-1 align-middle">
         <img
           src="./static/emsSeal.png"
           width="50px"
