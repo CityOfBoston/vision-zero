@@ -149,12 +149,25 @@ class Map extends React.Component {
     );
 
     // Assemble the HTML for the markers' popups (Leaflet's bindPopup method doesn't accept React JSX)
-    const popupContent = `<div style="font-family:'Roboto'"><p><strong>Crash Type:</strong> ${
-      feature.properties.mode_type
-    }<br><strong>Dispatch Time Stamp:</strong> ${formattedDate}
-          <br><strong>Location Type:</strong> ${
-            feature.properties.location_type
-          }</p></div>`;
+    // const popupContent = `<div><p><strong>Crash Type:</strong> ${
+    //   feature.properties.mode_type
+    // }<br><strong>Dispatch Time Stamp:</strong> ${formattedDate}
+    //       <br><strong>Location Type:</strong> ${
+    //         feature.properties.location_type
+    //       }</p></div>`;
+    const popupContent = `
+    <div style="min-width: 240px">
+      <div class="m-v200">
+          <ul class="dl dl--sm">
+              <li class="dl-i"><span class="dl-t">Crash type:</span> <span class="dl-d">${
+                feature.properties.mode_type
+              }</span></li>
+              <li class="dl-i"><span class="dl-t">Time stamp:</span> <span class="dl-d">${formattedDate}</span></li>
+              <li class="dl-i"><span class="dl-t">Mode type:</span> <span class="dl-d">${
+                feature.properties.location_type
+              }</span></li>
+          </ul>
+      </div>`;
 
     // Add our popups to the features
     layer.bindPopup(popupContent);
@@ -163,9 +176,13 @@ class Map extends React.Component {
   render() {
     return (
       <div>
-        <div style={{ height: '100vh' }} ref={this.setMapEl}>
+        <div style={{ height: 'calc(100vh - 175px)' }} ref={this.setMapEl}>
           <div
-            style={{ zIndex: 1000, position: 'relative', fontFamily: 'Roboto' }}
+            style={{
+              zIndex: '1000',
+              position: 'relative',
+              fontFamily: 'Roboto',
+            }}
           >
             <FeatureCounts
               crashCounts={this.state.crashCounts}

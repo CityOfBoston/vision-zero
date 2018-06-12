@@ -15,12 +15,13 @@ export default class IndexPage extends React.Component {
   render() {
     return (
       <div>
-        <Layout title="Vision Zero Boston" />
-        <div>
-          <Col>
-            <MapContainer />
-          </Col>
-        </div>
+        <Layout title="Vision Zero Boston">
+          <div>
+            <Col>
+              <MapContainer />
+            </Col>
+          </div>
+        </Layout>
       </div>
     );
   }
