@@ -1,45 +1,60 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { Col } from 'reactstrap';
-import MapContainer from '../components/MapContainer';
 
 export default class IndexPage extends React.Component {
   render() {
     return (
       <div>
-        <Layout title="Vision Zero Boston">
-          <Col className="m-1">
+        <Layout title="Vision Zero Boston" aboutPage>
+          <Col className="pl-5 pr-5">
+            <div className="sh mt-4 mb-4">
+              <h2 className="sh-title">Vision Zero Crash Records Map</h2>
+            </div>
             <p>
-              The information in this map is for the time period July 1, 2014
-              through three months from the present. New data is uploaded each
-              month but always three months behind to allow for data
-              verification.
+              <a href="http://visionzeroboston.org">Vision Zero Boston</a> is
+              our commitment to focus the city’s resources on proven strategies
+              to eliminate fatal and serious traffic crashes in the city by
+              2030. We are inspired by the belief that even one fatality is too
+              many.
             </p>
             <p>
-              For the purposes of this map, “crash” is defined as a traffic
-              incident in the City of Boston that resulted in a response by
-              Boston Emergency Medical Services. These include incidents on
-              streets owned by the City, as well as incidents on state-owned
-              roadways. Note the following:
+              This map and associated dataset, provided as part of the Vision
+              Zero Boston program, contains records of the date, time, location,
+              and type of crash for incidents requiring public safety response
+              which may involve injuries or fatalities. All records are compiled
+              by the Department of Innovation and Technology from the City’s
+              Computer-Aided Dispatch (911) system and verified as having
+              required a response from a public safety agency. To protect the
+              privacy of individuals involved in these incidents, we do not
+              indicate the severity of specific crashes or whether medical care
+              was provided in any specific case.{' '}
             </p>
-            <ul>
-              <li>
-                Only one dot per incident is shown, regardless of the number of
-                patients.
-              </li>
-              <li>
-                If there was more than one patient per incident, the mode is
-                assigned to the most vulnerable user (i.e. pedestrians more
-                vulnerable than bicyclists more vulnerable than motorists).
-              </li>
-            </ul>
             <p>
-              “Fatalities” includes traffic fatalities that occurred on
-              city-owned streets as reported by Boston Police Department. We are
-              in the process of including fatalities on state-owned roadways
-              with the exception of interstate highways.
+              Additional notes:
+              <ul>
+                <li>
+                  {' '}
+                  Each incident is included only once regardless of the number
+                  of individuals involved.
+                </li>
+                <li>
+                  The date and time of an incident reflects when public safety
+                  response was dispatched to the location, not the crash itself.
+                </li>
+                <li>
+                  Records are typically updated on a monthly basis, but because
+                  the verification process involves manual confirmation of
+                  incidents, exact posting schedules may vary.
+                </li>{' '}
+                <li>
+                  Records may be updated after their initial posting if new
+                  information becomes available.
+                </li>
+              </ul>
             </p>
-            <p className="font-weight-bold">
+
+            <p>
               Please note that the data and information on this website is for
               informational purposes only. While we seek to provide accurate
               information, please note that errors may be present and

@@ -4,7 +4,6 @@ import {
   Button,
   ButtonGroup,
   Card,
-  CardTitle,
   Form,
   FormGroup,
   Input,
@@ -12,14 +11,12 @@ import {
   Row,
 } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
-import Modal from '../components/Modal';
 
 export default function Filters(props) {
   return (
     <div>
       <Row className="ml-1">
-        <h5 className="mt-3 font-weight-bold">FILTER CRASHES</h5>
-        {/* <Modal /> */}
+        <h5 className="mt-3 font-weight-bold text-uppercase">Filter crashes</h5>
       </Row>
       <Card className="border-0">
         <ButtonGroup className="m-1" color="primary">
@@ -55,14 +52,16 @@ export default function Filters(props) {
             color="primary"
             onClick={() => props.modeChange('all')}
             active={props.modeSelection === 'all'}
-            className="w-25"
+            className="w-25 font-weight-bold"
           >
             All
           </Button>
         </ButtonGroup>
         <Form className="m-1">
           <FormGroup>
-            <Label for="from">From Date:</Label>
+            <Label for="from" className="font-weight-bold text-uppercase">
+              From Date:
+            </Label>
             <Input
               id="from"
               type="date"
@@ -71,7 +70,9 @@ export default function Filters(props) {
               value={props.fromDate}
               className="mb-2"
             />
-            <Label for="to">To Date:</Label>
+            <Label for="to" className="font-weight-bold text-uppercase">
+              To Date:
+            </Label>
             <Input
               id="to"
               type="date"
@@ -82,58 +83,6 @@ export default function Filters(props) {
           </FormGroup>
         </Form>
       </Card>
-      <Card className="mt-1 border-0">
-        {/* <CardTitle className="m-2 text-uppercase font-weight-bold">
-          LEGEND
-        </CardTitle> */}
-        <Row>
-          <img
-            src="./static/marker-11-red.svg"
-            width="20px"
-            height="20px"
-            className="ml-4"
-          />
-          <p>Pedestrian crash</p>
-        </Row>
-        <Row>
-          <img
-            src="./static/marker-11-yellow.svg"
-            width="20px"
-            height="20px"
-            className="ml-4"
-          />
-          <p>Bicyclist crash</p>
-        </Row>
-        <Row>
-          <img
-            src="./static/marker-11-blue.svg"
-            width="20px"
-            height="20px"
-            className="ml-4"
-          />
-          <p>Motor vehicle crash</p>
-        </Row>
-      </Card>
-      <Row className="mt-1 ml-1 align-middle">
-        <img
-          src="./static/emsSeal.png"
-          width="50px"
-          height="50px"
-          className="p-1"
-        />
-        <img
-          src="./static/bpdSeal.jpg"
-          width="50px"
-          height="55px"
-          className="p-1"
-        />
-        <img
-          src="./static/gisSeal.jpg"
-          width="50px"
-          height="50px"
-          className="p-1"
-        />
-      </Row>
     </div>
   );
 }

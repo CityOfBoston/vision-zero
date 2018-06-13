@@ -1,20 +1,11 @@
 import React from 'react';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
-import {
-  Col,
-  Navbar,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-} from 'reactstrap';
+import { Navbar, NavbarBrand } from 'reactstrap';
 
 export default class Layout extends React.Component {
   render() {
     return (
-      // create div for page content with height of the entire veiw port
       <div>
         <Head>
           <title> {this.props.title} </title>
@@ -39,67 +30,72 @@ export default class Layout extends React.Component {
             content="width=device-width, initial-scale=1.0"
           />
         </Head>
-
         {/* Make sure the heigh of the body element is the entire view port */}
         <style global jsx>{`
           @import url('https://fonts.googleapis.com/css?family=Lora:400,400i,700|Montserrat:400,700');
-          body {
+
+          // set fonts for elements
+          body,
+          h2,
+          h3,
+          h4,
+          h5,
+          label {
             font-family: 'Montserrat';
-            position: relative;
-            margin: 0;
-            height: 100%;
           }
           p,
           input {
             font-family: 'Lora';
+            font-size: 18px;
           }
+
+          // update link styles
           a:hover {
             text-decoration: none;
             color: #fb4d42;
           }
+
+          // leaflet pop-ups styles
           .leaflet-popup-content-wrapper {
             border-radius: 0px;
-            padding: 0.2rem;
+          }
+          .leaflet-popup-content {
+            margin: 1em;
           }
           .dl-t {
-            width: 40%;
+            width: 50%;
+            clear: none;
           }
           .dl-d {
-            width: 60%;
+            width: 50%;
           }
           .dl-i {
             padding: 0.2rem !important;
           }
+
+          // filter button styles
           .btn-outline-primary {
             color: #091f2f;
-            border-color: #091f2f;
+            border-color: #d2d2d2;
           }
           .btn {
             border-radius: 0;
           }
           .btn-outline-primary.active,
           .btn-outline-primary:active,
-          .btn-outline-primary:hover,
-          .show > .btn-outline-primary.dropdown-toggle {
+          .btn-outline-primary:hover {
             background-color: #288be4 !important;
-            border-color: #091f2f !important;
-          }
-          label {
-            text-transform: uppercase;
-            font-weight: 700;
+            border-color: #d2d2d2 !important;
           }
           .form-control {
             border-radius: 0;
-            border-color: #091f2f;
+            border-color: #d2d2d2;
           }
         `}</style>
-        <div style={{ minHeight: '100%', marginBottom: '-50px' }}>
+        {/* set container div with room for navbar  */}
+        <div style={{ minHeight: 'calc(100vh - 125px)' }}>
           <Navbar>
-            <NavbarBrand
-              href="http://www.visionzeroboston.org/"
-              target="_blank"
-              className=""
-            >
+            <NavbarBrand href="http://www.visionzeroboston.org/" className="">
               <img
                 src="./static/VisionZeroLogo.png"
                 style={{ width: '10em' }}
@@ -107,7 +103,7 @@ export default class Layout extends React.Component {
             </NavbarBrand>
             <div className="lo">
               <div className="lo-l">
-                <a href="https://www.boston.gov/" target="_blank">
+                <a href="https://www.boston.gov/">
                   <img
                     src="https://patterns.boston.gov/images/public/logo.svg"
                     alt="Boston.gov"
@@ -118,72 +114,52 @@ export default class Layout extends React.Component {
               </div>
             </div>
           </Navbar>
-
-          {/* <NavbarBrand
-          href="http://www.visionzeroboston.org/"
-          target="_blank"
-          className=""
-        >
-          <div className="lo">
-            <div className="lo-l">
-              <a href="https://www.boston.gov/">
-                <img
-                  src="https://patterns.boston.gov/images/public/logo.svg"
-                  alt="Boston.gov"
-                  className="lo-i"
-                />
-              </a>
-              <span className="lo-t">Vision Zero Crash Map</span>
-            </div>
-          </div>
-        </NavbarBrand>
-        <div className="ml-auto">
-          <a href="https://www.boston.gov" className="p-0">
-            <img src="./static/VisionZeroLogo.png" style={{ width: '10em' }} />
-          </a>
-        </div> */}
-
+          {/* add secondary navbar */}
           <nav className="nv-s">
             <input
               type="checkbox"
               id="nv-s-tr"
               className="nv-s-tr"
               aria-hidden="true"
+              value="on"
             />
             <ul className="nv-s-l">
               <li className="nv-s-l-i">
-                <label htmlFor="nv-s-tr" className="nv-s-l-b" type="button">
+                <label htmlFor="nv-s-tr" className="nv-s-l-b">
                   Navigation
                 </label>
               </li>
-
               <li className="nv-s-l-i">
                 <a
-                  href="/index"
-                  title="View the map"
-                  className="nv-s-l-a nv-s-l-a--active"
+                  className={`nv-s-l-a ${
+                    this.props.indexPage ? 'nv-s-l-a--active' : ''
+                  }`}
+                  href="/"
                 >
-                  The map
+                  View the map
                 </a>
               </li>
               <li className="nv-s-l-i">
                 <a
-                  href="https://data.boston.gov/dataset/vision-zero-crash-records"
-                  title="Download the raw data"
                   className="nv-s-l-a"
+                  href="https://data.boston.gov/dataset/vision-zero-crash-records"
                 >
                   Download the data
                 </a>
               </li>
               <li className="nv-s-l-i">
-                <a href="/about" title="About this map" className="nv-s-l-a">
+                <a
+                  className={`nv-s-l-a ${
+                    this.props.aboutPage ? 'nv-s-l-a--active' : ''
+                  }`}
+                  href="/about"
+                >
                   About
                 </a>
               </li>
             </ul>
           </nav>
           {this.props.children}
-          <div style={{ height: '50px' }} />
         </div>
         <footer
           className="ft"
@@ -229,50 +205,6 @@ export default class Layout extends React.Component {
             </ul>
           </div>
         </footer>
-        {/* <footer
-          className="ft"
-          style={{ position: 'absolute', left: '0', right: '0', bottom: '0' }}
-        >
-          <div className="ft-c">
-            <ul className="ft-ll ft-ll--r">
-              <li className="ft-ll-i">
-                <a
-                  href="http://www.cityofboston.gov/311/"
-                  className="ft-ll-a lnk--yellow"
-                >
-                  <span className="ft-ll-311">BOS:311</span>
-                  <span className="tablet--hidden"> - </span>Report an issue
-                </a>
-              </li>
-            </ul>
-            <ul className="ft-ll">
-              <li className="ft-ll-i">
-                <a
-                  href="https://www.boston.gov/departments/mayors-office/martin-j-walsh"
-                  className="ft-ll-a"
-                >
-                  Mayor Martin J Walsh
-                </a>
-              </li>
-              <li className="ft-ll-i">
-                <a
-                  href="https://www.boston.gov/copyright/privacyandsecurity.asp"
-                  className="ft-ll-a"
-                >
-                  Privacy Policy
-                </a>
-              </li>
-              <li className="ft-ll-i">
-                <a
-                  href="https://www.boston.gov/departments/human-resources/career-center"
-                  className="ft-ll-a"
-                >
-                  Careers
-                </a>
-              </li>
-            </ul>
-          </div>
-        </footer> */}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/reactstrap/6.0.1/reactstrap.full.min.js" />
       </div>
     );
@@ -282,4 +214,6 @@ export default class Layout extends React.Component {
 Layout.propTypes = {
   title: PropTypes.string,
   children: PropTypes.element,
+  indexPage: PropTypes.bool,
+  aboutPage: PropTypes.bool,
 };
