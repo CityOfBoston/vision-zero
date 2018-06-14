@@ -11,7 +11,8 @@ export default class Layout extends React.Component {
           <title> {this.props.title} </title>
           <link
             rel="stylesheet"
-            href="https://www.boston.gov/crispus/css/public.css"
+            type="text/css"
+            href="https://patterns.boston.gov/css/public.css"
           />
           <link
             rel="stylesheet"
@@ -32,8 +33,6 @@ export default class Layout extends React.Component {
         </Head>
         {/* Make sure the heigh of the body element is the entire view port */}
         <style global jsx>{`
-          @import url('https://fonts.googleapis.com/css?family=Lora:400,400i,700|Montserrat:400,700');
-
           // set fonts for elements
           body,
           h2,
@@ -95,7 +94,7 @@ export default class Layout extends React.Component {
         {/* set container div with room for navbar  */}
         <div style={{ minHeight: 'calc(100vh - 125px)' }}>
           <Navbar>
-            <NavbarBrand href="http://www.visionzeroboston.org/" className="">
+            <NavbarBrand href="http://www.visionzeroboston.org/">
               <img
                 src="./static/VisionZeroLogo.png"
                 style={{ width: '10em' }}

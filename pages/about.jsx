@@ -28,13 +28,12 @@ export default class IndexPage extends React.Component {
               required a response from a public safety agency. To protect the
               privacy of individuals involved in these incidents, we do not
               indicate the severity of specific crashes or whether medical care
-              was provided in any specific case.{' '}
+              was provided in any specific case.
             </p>
             <p>
               Additional notes:
               <ul>
                 <li>
-                  {' '}
                   Each incident is included only once regardless of the number
                   of individuals involved.
                 </li>
@@ -46,7 +45,7 @@ export default class IndexPage extends React.Component {
                   Records are typically updated on a monthly basis, but because
                   the verification process involves manual confirmation of
                   incidents, exact posting schedules may vary.
-                </li>{' '}
+                </li>
                 <li>
                   Records may be updated after their initial posting if new
                   information becomes available.

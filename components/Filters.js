@@ -59,7 +59,7 @@ export default function Filters(props) {
         </ButtonGroup>
         <Form className="m-1">
           <FormGroup>
-            <Label for="from" className="font-weight-bold text-uppercase">
+            <Label htmlFor="from" className="font-weight-bold text-uppercase">
               From Date:
             </Label>
             <Input
@@ -70,7 +70,7 @@ export default function Filters(props) {
               value={props.fromDate}
               className="mb-2"
             />
-            <Label for="to" className="font-weight-bold text-uppercase">
+            <Label htmlFor="to" className="font-weight-bold text-uppercase">
               To Date:
             </Label>
             <Input
