@@ -80,7 +80,7 @@ class Map extends React.Component {
       this.props.modeSelection,
       this.props.fromDate,
       this.props.toDate,
-      this.props.dataSet
+      this.props.dataset
     );
 
     this.crashFeatureLayer.setWhere(allModesSelected);
@@ -105,7 +105,7 @@ class Map extends React.Component {
       .addLayer(this.crashFeatureLayer);
 
     // Query for feature counts and update this.state.crashCounts
-    this.updateFeatures(allModesSelected, this.props.dataSet);
+    this.updateFeatures(allModesSelected, this.props.dataset);
 
     // Query for last updated date
     this.crashFeatureLayer
@@ -127,17 +127,17 @@ class Map extends React.Component {
   };
 
   // Update query and features when new selections are made
-  componentWillReceiveProps({ modeSelection, fromDate, toDate, dataSet }) {
+  componentWillReceiveProps({ modeSelection, fromDate, toDate, dataset }) {
     const { allModesSelected, oneModeSelected } = this.props.makeFeaturesQuery(
       modeSelection,
       fromDate,
       toDate,
-      dataSet
+      dataset
     );
 
     // If the selected dataset has changed, remove the previous one from the map
-    if (this.props.dataSet !== dataSet) {
-      dataSet == 'crash'
+    if (this.props.dataset !== dataset) {
+      dataset == 'crash'
         ? this.map.removeLayer(this.fatalityFeatureLayer)
         : this.map.removeLayer(this.crashFeatureLayer);
     }
@@ -146,21 +146,21 @@ class Map extends React.Component {
       this.props.modeSelection !== modeSelection ||
       this.props.fromDate !== fromDate ||
       this.props.toDate !== toDate ||
-      this.props.dataSet !== dataSet
+      this.props.dataset !== dataset
     ) {
       if (modeSelection == 'all') {
-        this.updateFeatures(allModesSelected, dataSet);
+        this.updateFeatures(allModesSelected, dataset);
       } else {
-        this.updateFeatures(oneModeSelected, dataSet);
+        this.updateFeatures(oneModeSelected, dataset);
       }
     }
   }
 
   // Update features when user makes new selections
-  updateFeatures = (query, dataSet) => {
+  updateFeatures = (query, dataset) => {
     // Make sure the selected dataset is added to the map, update features on
     // other selections dataset
-    dataSet == 'crash'
+    dataset == 'crash'
       ? this.crashFeatureLayer.addTo(this.map).setWhere(query)
       : this.fatalityFeatureLayer.addTo(this.map).setWhere(query);
   };
@@ -169,7 +169,7 @@ class Map extends React.Component {
   bindPopUp = (feature, layer) => {
     // Format dispatch timestamp to be readable for each dataset
     const formattedDate =
-      this.props.dataSet == 'crash'
+      this.props.dataset == 'crash'
         ? format(feature.properties.dispatch_ts, 'YYYY-MM-HH hh:mm:ss')
         : // Don't show the time on fatalities, just feels a little more respectful
           format(feature.properties.date_time, 'YYYY-MM-HH');
@@ -217,5 +217,5 @@ Map.propTypes = {
   toDate: PropTypes.string,
   modeSelection: PropTypes.string,
   makeFeaturesQuery: PropTypes.func,
-  dataSet: PropTypes.string,
+  dataset: PropTypes.string,
 };

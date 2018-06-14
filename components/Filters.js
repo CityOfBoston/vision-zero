@@ -63,8 +63,8 @@ export default function Filters(props) {
           <Button
             outline
             color="primary"
-            onClick={() => props.dataSetChange('crash')}
-            active={props.dataSet === 'crash'}
+            onClick={() => props.datasetChange('crash')}
+            active={props.dataset === 'crash'}
             className="w-50"
           >
             Crashes
@@ -72,8 +72,8 @@ export default function Filters(props) {
           <Button
             outline
             color="primary"
-            onClick={() => props.dataSetChange('fatality')}
-            active={props.dataSet === 'fatality'}
+            onClick={() => props.datasetChange('fatality')}
+            active={props.dataset === 'fatality'}
             className="w-50"
           >
             Fatalities
@@ -117,6 +117,6 @@ Filters.propTypes = {
   toChange: PropTypes.func,
   modeSelection: PropTypes.string,
   modeChange: PropTypes.func,
-  dataSet: PropTypes.string,
-  dataSetChange: PropTypes.func,
+  dataset: PropTypes.string,
+  datasetChange: PropTypes.func,
 };

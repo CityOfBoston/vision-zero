@@ -13,15 +13,15 @@ class MapContainer extends React.Component {
     const { fromDate, toDate } = getDefaultDates();
     this.state = {
       modeSelection: 'all',
-      dataSet: 'crash',
+      dataset: 'crash',
       fromDate,
       toDate,
     };
   }
 
   // Update state when dataset selection changes
-  dataSetChange = dataSet => {
-    this.setState({ dataSet });
+  datasetChange = dataset => {
+    this.setState({ dataset });
   };
 
   // Update state when mode selection changes
@@ -40,9 +40,9 @@ class MapContainer extends React.Component {
   };
 
   // Select which features to add to map
-  makeFeaturesQuery = (modeSelection, fromDate, toDate, dataSet) => {
+  makeFeaturesQuery = (modeSelection, fromDate, toDate, dataset) => {
     // set date field based on selected dataset
-    const datefield = dataSet == 'crash' ? 'dispatch_ts' : 'date_time';
+    const datefield = dataset == 'crash' ? 'dispatch_ts' : 'date_time';
 
     // set query for when all modes are selected (just use dates to filter)
     const allModesSelected = `${datefield} >= 
@@ -71,8 +71,8 @@ class MapContainer extends React.Component {
             toChange={this.filterToDate}
             modeSelection={this.state.modeSelection}
             modeChange={this.filterModes}
-            dataSet={this.state.dataSet}
-            dataSetChange={this.dataSetChange}
+            dataset={this.state.dataset}
+            datasetChange={this.datasetChange}
           />
           {/* add legend twice - once for when screen is large 
             and it should display above the map, and once for when 
@@ -87,7 +87,7 @@ class MapContainer extends React.Component {
             toDate={this.state.toDate}
             modeSelection={this.state.modeSelection}
             makeFeaturesQuery={this.makeFeaturesQuery}
-            dataSet={this.state.dataSet}
+            dataset={this.state.dataset}
           />
           {/* second instance of the legend component for when 
           screen is small */}
