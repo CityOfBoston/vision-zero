@@ -143,7 +143,12 @@ export default class Layout extends React.Component {
                   className="nv-s-l-a"
                   href="https://data.boston.gov/dataset/vision-zero-crash-records"
                 >
-                  Download the data
+                  Crash data
+                </a>
+              </li>
+              <li className="nv-s-l-i">
+                <a className="nv-s-l-a" href="">
+                  Fatality data
                 </a>
               </li>
               <li className="nv-s-l-i">

@@ -63,11 +63,11 @@ export default function Filters(props) {
           <Button
             outline
             color="primary"
-            onClick={() => props.dataSetChange('injury')}
-            active={props.dataSet === 'injury'}
+            onClick={() => props.dataSetChange('crash')}
+            active={props.dataSet === 'crash'}
             className="w-50"
           >
-            Injury
+            Crashes
           </Button>
           <Button
             outline
@@ -76,7 +76,7 @@ export default function Filters(props) {
             active={props.dataSet === 'fatality'}
             className="w-50"
           >
-            Fatality
+            Fatalities
           </Button>
         </ButtonGroup>
         {/* form for date selection */}

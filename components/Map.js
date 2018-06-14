@@ -64,8 +64,8 @@ class Map extends React.Component {
       }),
     };
 
-    // Add injury feature layer
-    this.injuryFeatureLayer = featureLayer({
+    // Add crash feature layer
+    this.crashFeatureLayer = featureLayer({
       url: feature_service_url,
       pointToLayer: function(geojson, latlng) {
         return L.marker(latlng, {
@@ -83,7 +83,7 @@ class Map extends React.Component {
       this.props.dataSet
     );
 
-    this.injuryFeatureLayer.setWhere(allModesSelected);
+    this.crashFeatureLayer.setWhere(allModesSelected);
 
     // Add fatalities feature layer to map
     this.fatalityFeatureLayer = featureLayer({
@@ -102,13 +102,13 @@ class Map extends React.Component {
     this.map
       .addLayer(basemapLayer('Gray'))
       .addLayer(tiledMapLayer({ url: basemap_url }))
-      .addLayer(this.injuryFeatureLayer);
+      .addLayer(this.crashFeatureLayer);
 
     // Query for feature counts and update this.state.crashCounts
     this.updateFeatures(allModesSelected, this.props.dataSet);
 
     // Query for last updated date
-    this.injuryFeatureLayer
+    this.crashFeatureLayer
       .query()
       .where('1=1')
       .orderBy('dispatch_ts', 'DESC')
@@ -137,9 +137,9 @@ class Map extends React.Component {
 
     // If the selected dataset has changed, remove the previous one from the map
     if (this.props.dataSet !== dataSet) {
-      dataSet == 'injury'
+      dataSet == 'crash'
         ? this.map.removeLayer(this.fatalityFeatureLayer)
-        : this.map.removeLayer(this.injuryFeatureLayer);
+        : this.map.removeLayer(this.crashFeatureLayer);
     }
 
     if (
@@ -160,8 +160,8 @@ class Map extends React.Component {
   updateFeatures = (query, dataSet) => {
     // Make sure the selected dataset is added to the map, update features on
     // other selections dataset
-    dataSet == 'injury'
-      ? this.injuryFeatureLayer.addTo(this.map).setWhere(query)
+    dataSet == 'crash'
+      ? this.crashFeatureLayer.addTo(this.map).setWhere(query)
       : this.fatalityFeatureLayer.addTo(this.map).setWhere(query);
   };
 
@@ -169,7 +169,7 @@ class Map extends React.Component {
   bindPopUp = (feature, layer) => {
     // Format dispatch timestamp to be readable for each dataset
     const formattedDate =
-      this.props.dataSet == 'injury'
+      this.props.dataSet == 'crash'
         ? format(feature.properties.dispatch_ts, 'YYYY-MM-HH hh:mm:ss')
         : // Don't show the time on fatalities, just feels a little more respectful
           format(feature.properties.date_time, 'YYYY-MM-HH');

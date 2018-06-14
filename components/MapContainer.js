@@ -13,7 +13,7 @@ class MapContainer extends React.Component {
     const { fromDate, toDate } = getDefaultDates();
     this.state = {
       modeSelection: 'all',
-      dataSet: 'injury',
+      dataSet: 'crash',
       fromDate,
       toDate,
     };
@@ -42,7 +42,7 @@ class MapContainer extends React.Component {
   // Select which features to add to map
   makeFeaturesQuery = (modeSelection, fromDate, toDate, dataSet) => {
     // set date field based on selected dataset
-    const datefield = dataSet == 'injury' ? 'dispatch_ts' : 'date_time';
+    const datefield = dataSet == 'crash' ? 'dispatch_ts' : 'date_time';
 
     // set query for when all modes are selected (just use dates to filter)
     const allModesSelected = `${datefield} >= 
