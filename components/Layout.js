@@ -161,6 +161,7 @@ export default class Layout extends React.Component {
           </nav>
           {this.props.children}
         </div>
+        {/* add footer */}
         <footer
           className="ft"
           style={{

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-//import FeatureCounts from '../components/FeatureCounts';
 import { format } from 'date-fns';
 
 // We can't import these server-side because they require "window"
@@ -177,12 +176,7 @@ class Map extends React.Component {
               position: 'relative',
               fontFamily: 'Roboto',
             }}
-          >
-            {/* <FeatureCounts
-              crashCounts={this.state.crashCounts}
-              lastUpdatedDate={this.state.lastUpdatedDate}
-            /> */}
-          </div>
+          />
         </div>
       </div>
     );

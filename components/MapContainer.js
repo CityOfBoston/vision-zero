@@ -63,6 +63,9 @@ class MapContainer extends React.Component {
             modeSelection={this.state.modeSelection}
             modeChange={this.filterModes}
           />
+          {/* add legend twice - once for when screen is large 
+            and it should display above the map, and once for when 
+            screen is small and it should display below the map */}
           <Col className="p-0 d-none d-lg-block">
             <Legend />
           </Col>
@@ -74,7 +77,9 @@ class MapContainer extends React.Component {
             modeSelection={this.state.modeSelection}
             makeFeaturesQuery={this.makeFeaturesQuery}
           />
-          <Col className="d-none d-sm-block d-md-block d-lg-none pl-0">
+          {/* second instance of the legend component for when 
+          screen is small */}
+          <Col className="d-sm-block d-md-block d-lg-none pl-0">
             <Legend />
           </Col>
         </Col>
