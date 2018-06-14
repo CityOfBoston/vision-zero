@@ -102,7 +102,10 @@ class MapContainer extends React.Component {
 
 export default MapContainer;
 
-// set default months - we start with 2 months ago because data is always two months behind
+// set default dates for map load data gets added
+// a few months behind, so:
+// "from" is 6 months ago
+// "to" is 4 months ago
 const getDefaultDates = () => {
   const today = new Date();
   const fourMonthsAgo = subMonths(today, 4);

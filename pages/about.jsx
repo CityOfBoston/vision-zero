@@ -27,16 +27,16 @@ export default class IndexPage extends React.Component {
               </h2>
             </a>
             <p>
-              This map and associated crash dataset, provided as part of the
-              Vision Zero Boston program, contains records of the date, time,
-              location, and type of crash for incidents requiring public safety
-              response which may involve injuries or fatalities. All records are
-              compiled by the Department of Innovation and Technology from the
-              City’s Computer-Aided Dispatch (911) system and verified as having
-              required a response from a public safety agency. To protect the
-              privacy of individuals involved in these incidents, we do not
-              indicate the severity of specific crashes or whether medical care
-              was provided in any specific case.
+              This dataset, provided as part of the Vision Zero Boston program,
+              contains records of the date, time, location, and type of crash
+              for incidents requiring public safety response which may involve
+              injuries or fatalities. All records are compiled by the Department
+              of Innovation and Technology from the City’s Computer-Aided
+              Dispatch (911) system and verified as having required a response
+              from a public safety agency. To protect the privacy of individuals
+              involved in these incidents, we do not indicate the severity of
+              specific crashes or whether medical care was provided in any
+              specific case.
             </p>
             <p>Additional notes:</p>
             <ul

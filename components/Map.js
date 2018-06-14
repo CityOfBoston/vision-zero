@@ -145,8 +145,7 @@ class Map extends React.Component {
     if (
       this.props.modeSelection !== modeSelection ||
       this.props.fromDate !== fromDate ||
-      this.props.toDate !== toDate ||
-      this.props.dataset !== dataset
+      this.props.toDate !== toDate
     ) {
       if (modeSelection == 'all') {
         this.updateFeatures(allModesSelected, dataset);
@@ -158,8 +157,8 @@ class Map extends React.Component {
 
   // Update features when user makes new selections
   updateFeatures = (query, dataset) => {
-    // Make sure the selected dataset is added to the map, update features on
-    // other selections dataset
+    // Make sure the selected dataset is added to the map, update features based
+    // on other selections
     dataset == 'crash'
       ? this.crashFeatureLayer.addTo(this.map).setWhere(query)
       : this.fatalityFeatureLayer.addTo(this.map).setWhere(query);
