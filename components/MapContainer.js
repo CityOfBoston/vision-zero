@@ -2,6 +2,7 @@ import React from 'react';
 import { Col, Row } from 'reactstrap';
 import Filters from '../components/Filters';
 import Map from '../components/Map';
+import Legend from '../components/Legend';
 
 class MapContainer extends React.Component {
   constructor(props) {
@@ -62,14 +63,25 @@ class MapContainer extends React.Component {
             modeSelection={this.state.modeSelection}
             modeChange={this.filterModes}
           />
+          {/* add legend twice - once for when screen is large 
+            and it should display above the map, and once for when 
+            screen is small and it should display below the map */}
+          <Col className="p-0 d-none d-lg-block">
+            <Legend />
+          </Col>
         </Col>
-        <Col lg="9">
+        <Col lg="9" className="p-lg-0 pr-md-4 pl-md-4">
           <Map
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
             modeSelection={this.state.modeSelection}
             makeFeaturesQuery={this.makeFeaturesQuery}
           />
+          {/* second instance of the legend component for when 
+          screen is small */}
+          <Col className="d-sm-block d-md-block d-lg-none pl-0">
+            <Legend />
+          </Col>
         </Col>
       </Row>
     );

@@ -4,7 +4,6 @@ import {
   Button,
   ButtonGroup,
   Card,
-  CardTitle,
   Form,
   FormGroup,
   Input,
@@ -12,19 +11,18 @@ import {
   Row,
 } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
-import Modal from '../components/Modal';
 
 export default function Filters(props) {
   return (
     <div>
-      <Row className="ml-2">
-        <h3 className="mt-3 font-weight-bold">Traffic Crashes</h3>
-        <Modal />
+      <Row className="ml-1">
+        <h5 className="mt-3 font-weight-bold text-uppercase">Filter crashes</h5>
       </Row>
-      <Card>
-        <ButtonGroup className="m-2" color="info">
+      <Card className="border-0">
+        <ButtonGroup className="m-1" color="primary">
           <Button
             outline
+            color="primary"
             onClick={() => props.modeChange('mv')}
             active={props.modeSelection === 'mv'}
             className="w-25"
@@ -33,6 +31,7 @@ export default function Filters(props) {
           </Button>
           <Button
             outline
+            color="primary"
             onClick={() => props.modeChange('ped')}
             active={props.modeSelection === 'ped'}
             className="w-25"
@@ -41,6 +40,7 @@ export default function Filters(props) {
           </Button>
           <Button
             outline
+            color="primary"
             onClick={() => props.modeChange('bike')}
             active={props.modeSelection === 'bike'}
             className="w-25"
@@ -49,25 +49,30 @@ export default function Filters(props) {
           </Button>
           <Button
             outline
+            color="primary"
             onClick={() => props.modeChange('all')}
             active={props.modeSelection === 'all'}
-            className="w-25"
+            className="w-25 font-weight-bold"
           >
             All
           </Button>
         </ButtonGroup>
-        <Form className="m-2">
+        <Form className="m-1">
           <FormGroup>
-            <Label for="from">From Date:</Label>
+            <Label htmlFor="from" className="font-weight-bold text-uppercase">
+              From Date:
+            </Label>
             <Input
               id="from"
               type="date"
               onChange={props.fromChange}
               name="from"
               value={props.fromDate}
-              className="mb-1"
+              className="mb-2"
             />
-            <Label for="to">To Date:</Label>
+            <Label htmlFor="to" className="font-weight-bold text-uppercase">
+              To Date:
+            </Label>
             <Input
               id="to"
               type="date"
@@ -78,56 +83,6 @@ export default function Filters(props) {
           </FormGroup>
         </Form>
       </Card>
-      <Card className="mt-2">
-        <CardTitle className="m-2">Legend</CardTitle>
-        <Row>
-          <img
-            src="./static/marker-11-red.svg"
-            width="20px"
-            height="20px"
-            className="ml-4"
-          />
-          <p>Pedestrian</p>
-        </Row>
-        <Row>
-          <img
-            src="./static/marker-11-yellow.svg"
-            width="20px"
-            height="20px"
-            className="ml-4"
-          />
-          <p>Bicyclist</p>
-        </Row>
-        <Row>
-          <img
-            src="./static/marker-11-blue.svg"
-            width="20px"
-            height="20px"
-            className="ml-4"
-          />
-          <p>Motor Vehicle</p>
-        </Row>
-      </Card>
-      <Row className="mt-2 ml-1 align-middle">
-        <img
-          src="./static/emsSeal.png"
-          width="50px"
-          height="50px"
-          className="p-1"
-        />
-        <img
-          src="./static/bpdSeal.jpg"
-          width="50px"
-          height="55px"
-          className="p-1"
-        />
-        <img
-          src="./static/gisSeal.jpg"
-          width="50px"
-          height="50px"
-          className="p-1"
-        />
-      </Row>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FeatureCounts from '../components/FeatureCounts';
 import { format } from 'date-fns';
 
 // We can't import these server-side because they require "window"
@@ -40,25 +39,25 @@ class Map extends React.Component {
     // Bind leaflet map to html element
     this.map = L.map(el, {
       center: [42.318432, -71.079687],
-      zoom: 12,
+      zoom: 13,
     });
 
     // Set zoom control position
-    this.map.zoomControl.setPosition('bottomleft');
+    this.map.zoomControl.setPosition('topright');
 
     // Load in icons for symbology
     const icons = {
       ped: new L.Icon({
         iconUrl: './static/marker-11-red.svg',
-        iconSize: [20, 20],
+        iconSize: [30, 30],
       }),
       mv: new L.Icon({
         iconUrl: './static/marker-11-blue.svg',
-        iconSize: [20, 20],
+        iconSize: [30, 30],
       }),
       bike: new L.Icon({
         iconUrl: './static/marker-11-yellow.svg',
-        iconSize: [20, 20],
+        iconSize: [30, 30],
       }),
     };
 
@@ -149,12 +148,18 @@ class Map extends React.Component {
     );
 
     // Assemble the HTML for the markers' popups (Leaflet's bindPopup method doesn't accept React JSX)
-    const popupContent = `<div style="font-family:'Roboto'"><p><strong>Crash Type:</strong> ${
-      feature.properties.mode_type
-    }<br><strong>Dispatch Time Stamp:</strong> ${formattedDate}
-          <br><strong>Location Type:</strong> ${
-            feature.properties.location_type
-          }</p></div>`;
+    const popupContent = `
+    <div style="min-width: 230px">
+      <div class="m-v200">
+          <ul class="dl dl--sm">
+              <li class="dl-i"><span class="dl-d font-weight-bold">Crash type:</span> 
+              <span class="dl-t">${feature.properties.mode_type}</span></li>
+              <li class="dl-i"><span class="dl-d font-weight-bold">Time stamp:</span> 
+              <span class="dl-t">${formattedDate}</span></li>
+              <li class="dl-i"><span class="dl-d font-weight-bold">Mode type:</span> 
+              <span class="dl-t">${feature.properties.location_type}</span></li>
+          </ul>
+      </div>`;
 
     // Add our popups to the features
     layer.bindPopup(popupContent);
@@ -163,15 +168,15 @@ class Map extends React.Component {
   render() {
     return (
       <div>
-        <div style={{ height: '100vh' }} ref={this.setMapEl}>
+        {/* make map take up entire viewport with room for the navbars */}
+        <div style={{ height: 'calc(100vh - 125px)' }} ref={this.setMapEl}>
           <div
-            style={{ zIndex: 1000, position: 'relative', fontFamily: 'Roboto' }}
-          >
-            <FeatureCounts
-              crashCounts={this.state.crashCounts}
-              lastUpdatedDate={this.state.lastUpdatedDate}
-            />
-          </div>
+            style={{
+              zIndex: '1000',
+              position: 'relative',
+              fontFamily: 'Roboto',
+            }}
+          />
         </div>
       </div>
     );
