@@ -145,7 +145,8 @@ class Map extends React.Component {
     if (
       this.props.modeSelection !== modeSelection ||
       this.props.fromDate !== fromDate ||
-      this.props.toDate !== toDate
+      this.props.toDate !== toDate ||
+      this.props.dataset !== dataset
     ) {
       if (modeSelection == 'all') {
         this.updateFeatures(allModesSelected, dataset);

@@ -81,7 +81,7 @@ class MapContainer extends React.Component {
             <Legend />
           </Col>
         </Col>
-        <Col lg="9" className="p-lg-0 pr-md-4 pl-md-4">
+        <Col lg="9" className="p-lg-0 pr-md-5 pl-md-5">
           <Map
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
