@@ -53,7 +53,7 @@ export default function Filters(props) {
             color="primary"
             onClick={() => props.modeChange('all')}
             active={props.modeSelection === 'all'}
-            className="w-25 font-weight-bold"
+            className="w-25"
           >
             All
           </Button>
