@@ -14,6 +14,9 @@ const basemap_url =
 const feature_service_url =
   'https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/crash_cad_all_v/FeatureServer/0';
 
+const fatalities_url =
+  'https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/bpd_crashfatalities/FeatureServer/0';
+
 class Map extends React.Component {
   constructor(props) {
     super(props);
@@ -61,8 +64,8 @@ class Map extends React.Component {
       }),
     };
 
-    // Add feature layer
-    this.featureLayer = featureLayer({
+    // Add injury feature layer
+    this.injuryFeatureLayer = featureLayer({
       url: feature_service_url,
       pointToLayer: function(geojson, latlng) {
         return L.marker(latlng, {
@@ -76,22 +79,36 @@ class Map extends React.Component {
     const { allModesSelected } = this.props.makeFeaturesQuery(
       this.props.modeSelection,
       this.props.fromDate,
-      this.props.toDate
+      this.props.toDate,
+      this.props.dataSet
     );
 
-    this.featureLayer.setWhere(allModesSelected);
+    this.injuryFeatureLayer.setWhere(allModesSelected);
+
+    // Add fatalities feature layer to map
+    this.fatalityFeatureLayer = featureLayer({
+      url: fatalities_url,
+      pointToLayer: function(geojson, latlng) {
+        return L.marker(latlng, {
+          icon: icons[geojson.properties.mode_type.toLowerCase()],
+        });
+      },
+      onEachFeature: this.bindPopUp,
+    });
+
+    this.fatalityFeatureLayer.setWhere(allModesSelected);
 
     // Add basemap layers and features to map
     this.map
       .addLayer(basemapLayer('Gray'))
       .addLayer(tiledMapLayer({ url: basemap_url }))
-      .addLayer(this.featureLayer);
+      .addLayer(this.injuryFeatureLayer);
 
     // Query for feature counts and update this.state.crashCounts
-    this.updateFeatures(allModesSelected);
+    this.updateFeatures(allModesSelected, this.props.dataSet);
 
     // Query for last updated date
-    this.featureLayer
+    this.injuryFeatureLayer
       .query()
       .where('1=1')
       .orderBy('dispatch_ts', 'DESC')
@@ -110,42 +127,52 @@ class Map extends React.Component {
   };
 
   // Update query and features when new selections are made
-  componentWillReceiveProps({ modeSelection, fromDate, toDate }) {
+  componentWillReceiveProps({ modeSelection, fromDate, toDate, dataSet }) {
     const { allModesSelected, oneModeSelected } = this.props.makeFeaturesQuery(
       modeSelection,
       fromDate,
-      toDate
+      toDate,
+      dataSet
     );
+
+    // If the selected dataset has changed, remove the previous one from the map
+    if (this.props.dataSet !== dataSet) {
+      dataSet == 'injury'
+        ? this.map.removeLayer(this.fatalityFeatureLayer)
+        : this.map.removeLayer(this.injuryFeatureLayer);
+    }
 
     if (
       this.props.modeSelection !== modeSelection ||
       this.props.fromDate !== fromDate ||
-      this.props.toDate !== toDate
+      this.props.toDate !== toDate ||
+      this.props.dataSet !== dataSet
     ) {
       if (modeSelection == 'all') {
-        this.updateFeatures(allModesSelected);
+        this.updateFeatures(allModesSelected, dataSet);
       } else {
-        this.updateFeatures(oneModeSelected);
+        this.updateFeatures(oneModeSelected, dataSet);
       }
     }
   }
 
   // Update features when user makes new selections
-  updateFeatures = query => {
-    this.featureLayer.setWhere(query, () => {
-      // use _currentSnapshot to update the feature count after re-setting the map
-      const numFeatures = this.featureLayer._currentSnapshot.length;
-      this.setState({ crashCounts: numFeatures });
-    });
+  updateFeatures = (query, dataSet) => {
+    // Make sure the selected dataset is added to the map, update features on
+    // other selections dataset
+    dataSet == 'injury'
+      ? this.injuryFeatureLayer.addTo(this.map).setWhere(query)
+      : this.fatalityFeatureLayer.addTo(this.map).setWhere(query);
   };
 
   // Set popup for features
   bindPopUp = (feature, layer) => {
-    // Format dispatch timestamp to be readable
-    const formattedDate = format(
-      feature.properties.dispatch_ts,
-      'YYYY-MM-HH hh:mm:ss'
-    );
+    // Format dispatch timestamp to be readable for each dataset
+    const formattedDate =
+      this.props.dataSet == 'injury'
+        ? format(feature.properties.dispatch_ts, 'YYYY-MM-HH hh:mm:ss')
+        : // Don't show the time on fatalities, just feels a little more respectful
+          format(feature.properties.date_time, 'YYYY-MM-HH');
 
     // Assemble the HTML for the markers' popups (Leaflet's bindPopup method doesn't accept React JSX)
     const popupContent = `
@@ -190,4 +217,5 @@ Map.propTypes = {
   toDate: PropTypes.string,
   modeSelection: PropTypes.string,
   makeFeaturesQuery: PropTypes.func,
+  dataSet: PropTypes.string,
 };
