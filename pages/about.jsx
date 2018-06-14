@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from '../components/Layout';
 import { Col } from 'reactstrap';
 
-export default class IndexPage extends React.Component {
+export default class AboutPage extends React.Component {
   render() {
     return (
       <div>
