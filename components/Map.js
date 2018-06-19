@@ -11,7 +11,7 @@ const { basemapLayer, tiledMapLayer, featureLayer } = process.browser
 const basemap_url =
   'https://awsgeo.boston.gov/arcgis/rest/services/Basemaps/BostonCityBasemap_WM/MapServer';
 
-const feature_service_url =
+const crashes_url =
   'https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/crash_cad_all_v/FeatureServer/0';
 
 const fatalities_url =
@@ -66,7 +66,7 @@ class Map extends React.Component {
 
     // Add crash feature layer
     this.crashFeatureLayer = featureLayer({
-      url: feature_service_url,
+      url: crashes_url,
       pointToLayer: function(geojson, latlng) {
         return L.marker(latlng, {
           icon: icons[geojson.properties.mode_type.toLowerCase()],
