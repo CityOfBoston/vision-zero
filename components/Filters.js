@@ -19,6 +19,7 @@ export default function Filters(props) {
         <h5 className="mt-3 font-weight-bold text-uppercase">Filter crashes</h5>
       </Row>
       <Card className="border-0">
+        {/* buttons for mode selection */}
         <ButtonGroup className="m-1" color="primary">
           <Button
             outline
@@ -52,11 +53,33 @@ export default function Filters(props) {
             color="primary"
             onClick={() => props.modeChange('all')}
             active={props.modeSelection === 'all'}
-            className="w-25 font-weight-bold"
+            className="w-25"
           >
             All
           </Button>
         </ButtonGroup>
+        {/* buttons for dataset selection */}
+        <ButtonGroup className="m-1" color="primary">
+          <Button
+            outline
+            color="primary"
+            onClick={() => props.datasetChange('crash')}
+            active={props.dataset === 'crash'}
+            className="w-50"
+          >
+            Crashes
+          </Button>
+          <Button
+            outline
+            color="primary"
+            onClick={() => props.datasetChange('fatality')}
+            active={props.dataset === 'fatality'}
+            className="w-50"
+          >
+            Fatalities
+          </Button>
+        </ButtonGroup>
+        {/* form for date selection */}
         <Form className="m-1">
           <FormGroup>
             <Label htmlFor="from" className="font-weight-bold text-uppercase">
@@ -94,4 +117,6 @@ Filters.propTypes = {
   toChange: PropTypes.func,
   modeSelection: PropTypes.string,
   modeChange: PropTypes.func,
+  dataset: PropTypes.string,
+  datasetChange: PropTypes.func,
 };

@@ -133,7 +133,7 @@ export default class Layout extends React.Component {
                   className={`nv-s-l-a ${
                     this.props.indexPage ? 'nv-s-l-a--active' : ''
                   }`}
-                  href="/"
+                  href="."
                 >
                   View the map
                 </a>
@@ -143,7 +143,13 @@ export default class Layout extends React.Component {
                   className="nv-s-l-a"
                   href="https://data.boston.gov/dataset/vision-zero-crash-records"
                 >
-                  Download the data
+                  Crash data
+                </a>
+              </li>
+              <li className="nv-s-l-i">
+                {/* waiting on link to fatality open dataset */}
+                <a className="nv-s-l-a" href="">
+                  Fatality data
                 </a>
               </li>
               <li className="nv-s-l-i">
@@ -151,7 +157,7 @@ export default class Layout extends React.Component {
                   className={`nv-s-l-a ${
                     this.props.aboutPage ? 'nv-s-l-a--active' : ''
                   }`}
-                  href="/about"
+                  href="about"
                 >
                   About
                 </a>

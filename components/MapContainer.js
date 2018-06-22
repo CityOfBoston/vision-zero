@@ -3,6 +3,7 @@ import { Col, Row } from 'reactstrap';
 import Filters from '../components/Filters';
 import Map from '../components/Map';
 import Legend from '../components/Legend';
+import { format, subMonths } from 'date-fns';
 
 class MapContainer extends React.Component {
   constructor(props) {
@@ -12,10 +13,16 @@ class MapContainer extends React.Component {
     const { fromDate, toDate } = getDefaultDates();
     this.state = {
       modeSelection: 'all',
+      dataset: 'crash',
       fromDate,
       toDate,
     };
   }
+
+  // Update state when dataset selection changes
+  datasetChange = dataset => {
+    this.setState({ dataset });
+  };
 
   // Update state when mode selection changes
   filterModes = modeSelection => {
@@ -33,17 +40,19 @@ class MapContainer extends React.Component {
   };
 
   // Select which features to add to map
-  makeFeaturesQuery = (modeSelection, fromDate, toDate) => {
-    // set query for when "all" modes are selected
-    const allModesSelected = `dispatch_ts >=
-      '${fromDate}' AND 
-      dispatch_ts <= '${toDate}'`;
+  makeFeaturesQuery = (modeSelection, fromDate, toDate, dataset) => {
+    // set date field based on selected dataset
+    const datefield = dataset == 'crash' ? 'dispatch_ts' : 'date_time';
+
+    // set query for when all modes are selected (just use dates to filter)
+    const allModesSelected = `${datefield} >= 
+      '${fromDate}' AND ${datefield} <= '${toDate}'`;
 
     // set query for when one mode is selected
     const oneModeSelected = `mode_type =
       '${modeSelection}' AND 
-      dispatch_ts >= '${fromDate}' AND 
-      dispatch_ts <= '${toDate}'`;
+      ${datefield} >= '${fromDate}' AND 
+      ${datefield} <= '${toDate}'`;
 
     return {
       allModesSelected,
@@ -62,6 +71,8 @@ class MapContainer extends React.Component {
             toChange={this.filterToDate}
             modeSelection={this.state.modeSelection}
             modeChange={this.filterModes}
+            dataset={this.state.dataset}
+            datasetChange={this.datasetChange}
           />
           {/* add legend twice - once for when screen is large 
             and it should display above the map, and once for when 
@@ -70,12 +81,13 @@ class MapContainer extends React.Component {
             <Legend />
           </Col>
         </Col>
-        <Col lg="9" className="p-lg-0 pr-md-4 pl-md-4">
+        <Col lg="9" className="p-lg-0 pr-md-5 pl-md-5">
           <Map
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
             modeSelection={this.state.modeSelection}
             makeFeaturesQuery={this.makeFeaturesQuery}
+            dataset={this.state.dataset}
           />
           {/* second instance of the legend component for when 
           screen is small */}
@@ -90,22 +102,17 @@ class MapContainer extends React.Component {
 
 export default MapContainer;
 
-// set default months - we start with 2 months ago because data is always two months behind
+// set default dates for map load data gets added
+// a few months behind, so:
+// "from" is 6 months ago
+// "to" is 4 months ago
 const getDefaultDates = () => {
-  const date = new Date();
-  let dd = date.getDate();
-  let mm = date.getMonth() + 1;
-  const yyyy = date.getFullYear();
-  if (dd < 10) {
-    dd = '0' + dd;
-  }
-  if (mm < 10) {
-    mm = '0' + mm;
-  }
-  const twoMonth = mm - 2;
-  const threeMonths = mm - 3;
-  const from = yyyy + '-' + '0' + threeMonths + '-' + dd;
-  const to = yyyy + '-' + '0' + twoMonth + '-' + dd;
+  const today = new Date();
+  const fourMonthsAgo = subMonths(today, 4);
+  const sixMonthsAgo = subMonths(today, 6);
+  const from = format(sixMonthsAgo, 'YYYY-MM-DD');
+  const to = format(fourMonthsAgo, 'YYYY-MM-DD');
+
   return {
     fromDate: from,
     toDate: to,
