@@ -16,6 +16,7 @@ class MapContainer extends React.Component {
       dataset: 'crash',
       fromDate,
       toDate,
+      updatedDate: '',
     };
   }
 
@@ -37,6 +38,11 @@ class MapContainer extends React.Component {
   // Update state when toDate value changes
   filterToDate = e => {
     this.setState({ toDate: e.target.value });
+  };
+
+  // Set last updated date
+  setLastUpdatedDate = mapLastUpdatedDate => {
+    this.setState({ updatedDate: mapLastUpdatedDate });
   };
 
   // Select which features to add to map
@@ -74,6 +80,9 @@ class MapContainer extends React.Component {
             dataset={this.state.dataset}
             datasetChange={this.datasetChange}
           />
+          <p className="font-italic ml-1">
+            Data updated as of: {this.state.updatedDate}
+          </p>
           {/* add legend twice - once for when screen is large 
             and it should display above the map, and once for when 
             screen is small and it should display below the map */}
@@ -88,6 +97,7 @@ class MapContainer extends React.Component {
             modeSelection={this.state.modeSelection}
             makeFeaturesQuery={this.makeFeaturesQuery}
             dataset={this.state.dataset}
+            updatedDate={this.setLastUpdatedDate}
           />
           {/* second instance of the legend component for when 
           screen is small */}

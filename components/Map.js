@@ -22,7 +22,6 @@ class Map extends React.Component {
     super(props);
 
     this.state = {
-      crashCounts: 0,
       lastUpdatedDate: '',
     };
   }
@@ -104,7 +103,7 @@ class Map extends React.Component {
       .addLayer(tiledMapLayer({ url: basemap_url }))
       .addLayer(this.crashFeatureLayer);
 
-    // Query for feature counts and update this.state.crashCounts
+    // Query for feature counts
     this.updateFeatures(allModesSelected, this.props.dataset);
 
     // Query for last updated date
@@ -122,7 +121,11 @@ class Map extends React.Component {
           featureCollection.features[0].properties.dispatch_ts
         );
         const lastUpdate = format(mostRecentFeature, 'MM/YYYY');
+        // set last updated state for this component
         this.setState({ lastUpdatedDate: lastUpdate });
+        // pass that date to the parent MapContainer component
+        // so we can display that information under the filters
+        this.props.updatedDate(this.state.lastUpdatedDate);
       });
   };
 
@@ -196,15 +199,11 @@ class Map extends React.Component {
     return (
       <div>
         {/* make map take up entire viewport with room for the navbars */}
-        <div style={{ height: 'calc(100vh - 125px)' }} ref={this.setMapEl}>
-          <div
-            style={{
-              zIndex: '1000',
-              position: 'relative',
-              fontFamily: 'Roboto',
-            }}
-          />
-        </div>
+        <div
+          style={{ height: 'calc(100vh - 125px)' }}
+          ref={this.setMapEl}
+          lastUpdated={this.state.lastUpdatedDate}
+        />
       </div>
     );
   }
@@ -218,4 +217,5 @@ Map.propTypes = {
   modeSelection: PropTypes.string,
   makeFeaturesQuery: PropTypes.func,
   dataset: PropTypes.string,
+  updatedDate: PropTypes.func,
 };
