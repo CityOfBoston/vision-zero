@@ -1,0 +1,41 @@
+language: node_js
+node_js:
+- '8'
+cache:
+  directories:
+  - node_modules
+branches:
+  only:
+  - production
+  - staging
+install:
+- npm install
+script:
+- npm run build
+deploy:
+- provider: s3
+  skip_cleanup: true
+  access_key_id: "$AWS_ACCESS_KEY_ID"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY"
+  bucket: cob-digital-apps-staging-static
+  acl: public_read
+  region: "$AWS_DEFAULT_REGION"
+  local_dir: out
+  upload-dir: vision-zero
+  on:
+    branch: staging
+- provider: s3
+  skip_cleanup: true
+  access_key_id: "$AWS_ACCESS_KEY_ID"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY"
+  bucket: cob-digital-apps-prod-static
+  acl: public_read
+  region: "$AWS_DEFAULT_REGION"
+  local_dir: out
+  upload-dir: vision-zero
+  on:
+    branch: production
+notifications:
+  slack:
+    rooms:
+      secure: kAFHh31hPK6I8vm6r1d3YFn5DtmdvAKvX++N7iaYTV8wtQFgjiRnO+8IC1Um2MBoP6K7Ssj8DPUVR/NbGF7vcE5P3eUimF7cs2oplmix3L+LTGd193EPyXrA6lKE4KH6eNELXWNuvlTLESCsS632tSfZlPCcgtAvFTiSTO6iJBFxLkED5yzgjD17QqRkJMeqR3M0w/WLJEKpbRRu9iy1Uin2xcNOzm4MpxYjwUwQ1m9hdMt/FP+RdeRIObrWLNuV9/Sh0Ycyb6qtFHi0mR8HMXQMIKHCcfM93+7ARWqceVKgfZKuLmdMt/KbxrQA22Di0axe39UYfso/7bYTp0+VzCgO+ohUvyYNHIMtO610u8K67EjXCwIqGGbPZIqsq6nt0FyHFlPE7VtmDV6jvU7PAmxEUskP0SS1p2VwDOyGLS6Xymv48Z0XBfWqETcAqLRh2SH9oCH+/8bf5XA0p4xKfU9qAMvbtZFZlqSX4jTerfkP4hrmGah0wfY07eZu7kJuUbI76c2T1NALAXqWTKS3IEQU3EoveQulpk4bUx1I/VKSXSgO5zgYApp5TxXfH7JoyZ+LWXTzbF6K2qFqUvqGTNyD2AhmduJqxaSskpNPF0czwGafe/QeIa7WdcBNifP20Tsedk06bgZ4dUKM8qznrRh81Gn2QbTAAAm12PNDyN4=
