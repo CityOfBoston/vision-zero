@@ -64,7 +64,7 @@ export default class AboutPage extends React.Component {
               </li>
             </ul>
 
-            <a href="">
+            <a href="https://data.boston.gov/dataset/vision-zero-fatality-records">
               <h2
                 className="pt-2"
                 style={{ fontFamily: 'Lora', fontStyle: 'italic' }}
@@ -72,7 +72,43 @@ export default class AboutPage extends React.Component {
                 Fatality Data
               </h2>
             </a>
-            <p>Placeholder fatality data text.</p>
+            <p>
+              This dataset, provided as part of the Vision Zero Boston program,
+              contains records of the date, time, location, and type of fatality
+              for Vision Zero related crashes resulting in a fatality. All
+              records are compiled by the Department of Innovation and
+              Technology from the City’s Computer-Aided Dispatch (911) system
+              and verified by the Boston Police Department as being a Vision
+              Zero related fatality. To protect the privacy of individuals
+              involved in these incidents, we do not provide any descriptions of
+              the incident or whether medical care was provided in any specific
+              case.
+            </p>
+            <p>Additional notes:</p>
+            <ul
+              style={{
+                fontFamily: 'Lora',
+                fontSize: '18px',
+              }}
+            >
+              <li>
+                Each incident is included only once regardless of the number of
+                individuals involved.
+              </li>
+              <li>
+                The location of an incident reflects where public safety
+                response was dispatched to, not the incident itself.
+              </li>
+              <li>
+                Records are typically updated on a monthly basis, but because
+                the verification process involves manual confirmation of
+                incidents, exact posting schedules may vary.
+              </li>
+              <li>
+                Records may be updated after their initial posting if new
+                information becomes available.
+              </li>
+            </ul>
 
             <p style={{ fontStyle: 'italic' }}>
               Please note that the data and information on this website is for
