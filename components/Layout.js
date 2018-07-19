@@ -95,7 +95,10 @@ export default class Layout extends React.Component {
         <div style={{ minHeight: 'calc(100vh - 125px)' }}>
           <Navbar>
             <NavbarBrand href="http://www.visionzeroboston.org/">
-              <img src="/static/VisionZeroLogo.png" style={{ width: '10em' }} />
+              <img
+                src="/vision-zero/static/VisionZeroLogo.png"
+                style={{ width: '10em' }}
+              />
             </NavbarBrand>
             <div className="lo">
               <div className="lo-l">
