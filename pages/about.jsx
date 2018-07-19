@@ -64,7 +64,7 @@ export default class AboutPage extends React.Component {
               </li>
             </ul>
 
-            <a href="">
+            <a href="https://data.boston.gov/dataset/vision-zero-fatality-records">
               <h2
                 className="pt-2"
                 style={{ fontFamily: 'Lora', fontStyle: 'italic' }}
