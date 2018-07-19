@@ -97,7 +97,7 @@ class MapContainer extends React.Component {
             modeSelection={this.state.modeSelection}
             makeFeaturesQuery={this.makeFeaturesQuery}
             dataset={this.state.dataset}
-            updatedDate={this.setLastUpdatedDate}
+            updateDate={this.setLastUpdatedDate}
           />
           {/* second instance of the legend component for when 
           screen is small */}

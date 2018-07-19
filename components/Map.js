@@ -125,7 +125,7 @@ class Map extends React.Component {
         this.setState({ lastUpdatedDate: lastUpdate });
         // pass that date to the parent MapContainer component
         // so we can display that information under the filters
-        this.props.updatedDate(this.state.lastUpdatedDate);
+        this.props.updateDate(this.state.lastUpdatedDate);
       });
   };
 
@@ -217,5 +217,5 @@ Map.propTypes = {
   modeSelection: PropTypes.string,
   makeFeaturesQuery: PropTypes.func,
   dataset: PropTypes.string,
-  updatedDate: PropTypes.func,
+  updateDate: PropTypes.func,
 };
