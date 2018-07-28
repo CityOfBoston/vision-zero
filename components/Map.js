@@ -236,11 +236,7 @@ class Map extends React.Component {
     return (
       <div>
         {/* make map take up entire viewport with room for the navbars */}
-        <div
-          style={{ height: 'calc(100vh - 125px)' }}
-          ref={this.setMapEl}
-          lastupdated={this.state.lastUpdatedDate}
-        >
+        <div style={{ height: 'calc(100vh - 125px)' }} ref={this.setMapEl}>
           <div
             style={{ zIndex: 1000, position: 'relative', fontFamily: 'Lora' }}
           >
