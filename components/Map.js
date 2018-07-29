@@ -176,9 +176,9 @@ class Map extends React.Component {
       // return a list of feature ids
       .query()
       .where(query)
-      .ids((error, ids) => {
+      .count((error, count) => {
         // Use the length of the returned list to update pointCount
-        this.setState({ pointCount: ids.length });
+        this.setState({ pointCount: count });
       });
   };
 
