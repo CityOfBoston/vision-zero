@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
+import FeatureCounts from './FeatureCounts';
 
 // We can't import these server-side because they require "window"
 const L = process.browser ? require('leaflet') : null;
@@ -22,6 +23,7 @@ class Map extends React.Component {
     super(props);
 
     this.state = {
+      pointCount: 0,
       lastUpdatedDate: '',
     };
   }
@@ -51,15 +53,15 @@ class Map extends React.Component {
     const icons = {
       ped: new L.Icon({
         iconUrl: './static/marker-11-red.svg',
-        iconSize: [30, 30],
+        iconSize: [25, 25],
       }),
       mv: new L.Icon({
         iconUrl: './static/marker-11-blue.svg',
-        iconSize: [30, 30],
+        iconSize: [25, 25],
       }),
       bike: new L.Icon({
         iconUrl: './static/marker-11-yellow.svg',
-        iconSize: [30, 30],
+        iconSize: [25, 25],
       }),
     };
 
@@ -161,11 +163,23 @@ class Map extends React.Component {
 
   // Update features when user makes new selections
   updateFeatures = (query, dataset) => {
-    // Make sure the selected dataset is added to the map, update features based
-    // on other selections
-    dataset == 'crash'
-      ? this.crashFeatureLayer.addTo(this.map).setWhere(query)
-      : this.fatalityFeatureLayer.addTo(this.map).setWhere(query);
+    // Set the featureLayer to update based on the selected dataset
+    const selectedData =
+      dataset == 'crash' ? this.crashFeatureLayer : this.fatalityFeatureLayer;
+
+    selectedData
+      // Add the selected dataset to the map
+      .addTo(this.map)
+      // Only show points that match the user's selections
+      .setWhere(query)
+      // Query the layer based on the users selections and
+      // return a list of feature ids
+      .query()
+      .where(query)
+      .count((error, count) => {
+        // Use the length of the returned list to update pointCount
+        this.setState({ pointCount: count });
+      });
   };
 
   // Set popup for features
@@ -195,15 +209,46 @@ class Map extends React.Component {
     layer.bindPopup(popupContent);
   };
 
+  // Make mode selection nicer for displaying in FeatureCounts
+  formatModeSelection = modeSelection => {
+    if (modeSelection == 'all') {
+      return 'All';
+    } else if (modeSelection == 'bike') {
+      return 'Bike';
+    } else if (modeSelection == 'mv') {
+      return 'Motor vehicle';
+    } else {
+      return 'Pedestrian';
+    }
+  };
+
+  // Make dataset selection nicer for displaying in FeatureCounts
+  formatDataSelection = dataSelection => {
+    return dataSelection == 'crash' ? 'crashes' : 'fatalities';
+  };
+
+  // Make selected dates nicer for displaying in FeatureCounts
+  formatDate = date => {
+    return format(date, 'MM/D/YY');
+  };
+
   render() {
     return (
       <div>
         {/* make map take up entire viewport with room for the navbars */}
-        <div
-          style={{ height: 'calc(100vh - 125px)' }}
-          ref={this.setMapEl}
-          lastUpdated={this.state.lastUpdatedDate}
-        />
+        <div style={{ height: 'calc(100vh - 125px)' }} ref={this.setMapEl}>
+          <div
+            style={{ zIndex: 1000, position: 'relative', fontFamily: 'Lora' }}
+          >
+            <FeatureCounts
+              pointCount={this.state.pointCount}
+              mode={this.formatModeSelection(this.props.modeSelection)}
+              dataset={this.formatDataSelection(this.props.dataset)}
+              toDate={this.formatDate(this.props.toDate)}
+              fromDate={this.formatDate(this.props.fromDate)}
+            />
+          </div>
+        </div>
       </div>
     );
   }
