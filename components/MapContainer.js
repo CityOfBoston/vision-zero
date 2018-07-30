@@ -49,16 +49,19 @@ class MapContainer extends React.Component {
   makeFeaturesQuery = (modeSelection, fromDate, toDate, dataset) => {
     // set date field based on selected dataset
     const datefield = dataset == 'crash' ? 'dispatch_ts' : 'date_time';
+    // Here we deal with timezones :)
+    const fromDateWithTimeZone = `${fromDate} 05:00:00`;
+    const toDateWithTimeZone = `${toDate} 05:00:00`;
 
     // set query for when all modes are selected (just use dates to filter)
     const allModesSelected = `${datefield} >= 
-      '${fromDate}' AND ${datefield} <= '${toDate}'`;
+      '${fromDateWithTimeZone}' AND ${datefield} <= '${toDateWithTimeZone}'`;
 
     // set query for when one mode is selected
     const oneModeSelected = `mode_type =
       '${modeSelection}' AND 
-      ${datefield} >= '${fromDate}' AND 
-      ${datefield} <= '${toDate}'`;
+      ${datefield} >= '${fromDateWithTimeZone}' AND 
+      ${datefield} <= '${toDateWithTimeZone}'`;
 
     return {
       allModesSelected,

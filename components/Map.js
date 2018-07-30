@@ -8,10 +8,10 @@ const mapboxgl = process.browser ? require('mapbox-gl') : null;
 const { featureLayer } = process.browser ? require('esri-leaflet') : {};
 
 const crashes_url =
-  'https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/crash_cad_all_v/FeatureServer/0';
+  'https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/crashes_vision_zero/FeatureServer/0';
 
 const fatalities_url =
-  'https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/bpd_crashfatalities/FeatureServer/0';
+  'https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/fatalities_vision_zero/FeatureServer/0';
 
 class Map extends React.Component {
   constructor(props) {
@@ -299,9 +299,11 @@ class Map extends React.Component {
       // Format dispatch timestamp to be readable for each dataset
       const formattedDate =
         this.props.dataset == 'crash'
-          ? format(feature.properties.dispatch_ts, 'YYYY-MM-HH hh:mm:ss')
-          : // Don't show the time on fatalities, just feels a little more respectful
-            format(feature.properties.date_time, 'YYYY-MM-HH');
+          ? format(
+              new Date(feature.properties.dispatch_ts),
+              'MM/DD/YYYY h:m:s a'
+            )
+          : format(new Date(feature.properties.date_time), 'MM/DD/YYYY'); // Don't show the time on fatalities, just feels a little more respectful
 
       new mapboxgl.Popup()
         .setLngLat(feature.geometry.coordinates)
