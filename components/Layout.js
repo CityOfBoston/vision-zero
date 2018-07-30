@@ -15,9 +15,13 @@ export default class Layout extends React.Component {
             href="https://patterns.boston.gov/css/public.css"
           />
           <link
+            href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css"
+            rel="stylesheet"
+          />
+          {/* <link
             rel="stylesheet"
             href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
-          />
+          /> */}
           <link
             rel="stylesheet"
             href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
