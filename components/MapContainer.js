@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col, Row } from 'reactstrap';
 import Filters from '../components/Filters';
-//import Map from '../components/Map';
 import Legend from '../components/Legend';
 import { format, subMonths } from 'date-fns';
 import Map from '../components/Map';

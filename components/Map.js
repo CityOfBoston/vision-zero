@@ -304,7 +304,7 @@ class MapboxMap extends React.Component {
           : // Don't show the time on fatalities, just feels a little more respectful
             format(feature.properties.date_time, 'YYYY-MM-HH');
 
-      const popup = new mapboxgl.Popup()
+      new mapboxgl.Popup()
         .setLngLat(feature.geometry.coordinates)
         .setHTML(
           `<div style="min-width: 230px">
