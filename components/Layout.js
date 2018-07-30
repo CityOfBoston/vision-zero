@@ -58,13 +58,7 @@ export default class Layout extends React.Component {
             color: #fb4d42;
           }
 
-          // leaflet pop-ups styles
-          .leaflet-popup-content-wrapper {
-            border-radius: 0px;
-          }
-          .leaflet-popup-content {
-            margin: 1em;
-          }
+          // pop-up styles
           .dl-t {
             width: 50%;
             clear: none;

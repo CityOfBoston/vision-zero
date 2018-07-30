@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { getTime, format } from 'date-fns';
 import FeatureCounts from '../components/FeatureCounts';
 
+// We can't import these server-side because they require "window"
 const mapboxgl = process.browser ? require('mapbox-gl') : null;
 const { featureLayer } = process.browser ? require('esri-leaflet') : {};
 
@@ -78,15 +79,13 @@ class MapboxMap extends React.Component {
       // Add crashes source
       this.map.addSource('crashes', {
         type: 'geojson',
-        data:
-          'https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/crash_cad_all_v/FeatureServer/0//query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=4326&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=',
+        data: `${crashes_url}/query?where=1%3D1&outFields=*&outSR=4326&returnExceededLimitFeatures=true&f=pgeojson`,
       });
 
       // Add fatalities source
       this.map.addSource('fatalities', {
         type: 'geojson',
-        data:
-          'https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/bpd_crashfatalities/FeatureServer/0//query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=4326&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=',
+        data: `${fatalities_url}/query?where=1%3D1&outFields=*&outSR=4326&returnExceededLimitFeatures=true&f=pgeojson`,
       });
 
       // Add point layer for crashes
@@ -304,7 +303,7 @@ class MapboxMap extends React.Component {
           : // Don't show the time on fatalities, just feels a little more respectful
             format(feature.properties.date_time, 'YYYY-MM-HH');
 
-      const popup = new mapboxgl.Popup()
+      new mapboxgl.Popup()
         .setLngLat(feature.geometry.coordinates)
         .setHTML(
           `<div style="min-width: 230px">
