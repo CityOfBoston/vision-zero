@@ -1,9 +1,10 @@
 import React from 'react';
 import { Col, Row } from 'reactstrap';
 import Filters from '../components/Filters';
-import Map from '../components/Map';
+//import Map from '../components/Map';
 import Legend from '../components/Legend';
 import { format, subMonths } from 'date-fns';
+import Map from '../components/Map';
 
 class MapContainer extends React.Component {
   constructor(props) {
@@ -91,13 +92,20 @@ class MapContainer extends React.Component {
           </Col>
         </Col>
         <Col lg="9" className="p-lg-0 pr-md-5 pl-md-5">
-          <Map
+          {/* <Map
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
             modeSelection={this.state.modeSelection}
             makeFeaturesQuery={this.makeFeaturesQuery}
             dataset={this.state.dataset}
             updateDate={this.setLastUpdatedDate}
+          /> */}
+          <Map
+            modeSelection={this.state.modeSelection}
+            fromDate={this.state.fromDate}
+            toDate={this.state.toDate}
+            dataset={this.state.dataset}
+            makeFeaturesQuery={this.makeFeaturesQuery}
           />
           {/* second instance of the legend component for when 
           screen is small */}
