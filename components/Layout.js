@@ -15,8 +15,8 @@ export default class Layout extends React.Component {
             href="https://patterns.boston.gov/css/public.css"
           />
           <link
+            href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css"
             rel="stylesheet"
-            href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
           />
           <link
             rel="stylesheet"
@@ -54,19 +54,13 @@ export default class Layout extends React.Component {
             color: #fb4d42;
           }
 
-          // leaflet pop-ups styles
-          .leaflet-popup-content-wrapper {
-            border-radius: 0px;
-          }
-          .leaflet-popup-content {
-            margin: 1em;
-          }
+          // pop-up styles
           .dl-t {
             width: 50%;
             clear: none;
           }
           .dl-d {
-            width: 50%;
+            width: 100%;
           }
           .dl-i {
             padding: 0.2rem !important;
