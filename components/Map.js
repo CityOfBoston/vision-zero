@@ -176,7 +176,7 @@ class MapboxMap extends React.Component {
           },
           // increase intensity as zoom level increases
           'heatmap-intensity': {
-            stops: [[12, 1], [15, 3]],
+            stops: [[12, 1], [15, 0.1]],
           },
           // assign color values be applied to points depending on their density
           'heatmap-color': [
@@ -184,19 +184,21 @@ class MapboxMap extends React.Component {
             ['linear'],
             ['heatmap-density'],
             0,
-            'rgba(241,238,246,0)',
+            'rgba(241,238,246,0.1)',
             0.2,
-            'rgba(189,201,225,0.5)',
+            'rgba(166,189,219,0.5)',
             0.4,
             'rgb(116,169,207)',
             0.6,
-            'rgb(43,140,190)',
+            'rgb(54,144,192)',
             0.8,
-            'rgb(4,90,141)',
+            'rgb(5,112,176)',
+            1,
+            'rgb(3,78,123)',
           ],
-          // increase radius as zoom increases
+          // Increase radius as zoom increases
           'heatmap-radius': {
-            stops: [[12, 15], [16, 20]],
+            stops: [[12, 11], [16, 15]],
           },
           // decrease opacity to transition into the circle layer
           'heatmap-opacity': {
@@ -220,7 +222,7 @@ class MapboxMap extends React.Component {
           },
           // increase intensity as zoom level increases
           'heatmap-intensity': {
-            stops: [[14, 1], [15, 0]],
+            stops: [[12, 1], [15, 3]],
           },
           // assign color values be applied to points depending on their density
           'heatmap-color': [
@@ -228,24 +230,28 @@ class MapboxMap extends React.Component {
             ['linear'],
             ['heatmap-density'],
             0,
-            'rgba(241,238,246,0)',
+            'rgba(241,238,246,0.1)',
             0.2,
-            'rgba(189,201,225,0.5)',
+            'rgba(166,189,219,0.5)',
             0.4,
             'rgb(116,169,207)',
             0.6,
-            'rgb(43,140,190)',
+            'rgb(54,144,192)',
             0.8,
-            'rgb(4,90,141)',
+            'rgb(5,112,176)',
+            1,
+            'rgb(3,78,123)',
           ],
-          // increase radius as zoom increases
+          // Increase heat map radius as zoom increases
+          // We keep fatalities at higher radius than crashes
+          // as it is a sparser dataset
           'heatmap-radius': {
             stops: [[12, 15], [16, 20]],
           },
           // decrease opacity to transition into the circle layer
           'heatmap-opacity': {
             default: 1,
-            stops: [[13, 1], [13, 0]],
+            stops: [[12, 1], [13, 0]],
           },
         },
       });
@@ -284,6 +290,29 @@ class MapboxMap extends React.Component {
         this.props.dataset
       );
       this.updatePointCount(allModesSelected, this.props.dataset);
+
+      // Set last updated date
+      // Query for last updated date
+      this.crashFeatureLayer
+        .query()
+        .where('1=1')
+        .orderBy('dispatch_ts', 'DESC')
+        .run((error, featureCollection) => {
+          if (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+            return;
+          }
+          const mostRecentFeature = new Date(
+            featureCollection.features[0].properties.dispatch_ts
+          );
+          const lastUpdate = format(mostRecentFeature, 'MM/YYYY');
+          // set last updated state for this component
+          this.setState({ lastUpdatedDate: lastUpdate });
+          // pass that date to the parent MapContainer component
+          // so we can display that information under the filters
+          this.props.updateDate(this.state.lastUpdatedDate);
+        });
     });
 
     // Bind pop-ups for layers
@@ -294,33 +323,37 @@ class MapboxMap extends React.Component {
         return;
       }
 
+      const numFeatures = features.length;
       const feature = features[0];
 
-      // Format dispatch timestamp to be readable for each dataset
-      const formattedDate =
-        this.props.dataset == 'crash'
-          ? format(
-              new Date(feature.properties.dispatch_ts),
-              'MM/DD/YYYY h:m:s a'
-            )
-          : format(new Date(feature.properties.date_time), 'MM/DD/YYYY'); // Don't show the time on fatalities, just feels a little more respectful
+      const properties = features.map(feature => [
+        feature.properties.mode_type,
+        feature.properties.dispatch_ts,
+      ]);
 
-      new mapboxgl.Popup()
+      const crash = numFeatures > 1 ? 'crashes' : 'crash';
+
+      new mapboxgl.Popup({ closeOnClickboolean: true })
         .setLngLat(feature.geometry.coordinates)
         .setHTML(
           `<div style="min-width: 230px">
-            <div class="m-v200">
+            <div>
                 <ul class="dl dl--sm">
-                    <li class="dl-i"><span class="dl-d font-weight-bold">Crash type:</span> 
-                    <span class="dl-t">${
-                      feature.properties.mode_type
-                    }</span></li>
-                    <li class="dl-i"><span class="dl-d font-weight-bold">Time stamp:</span> 
-                    <span class="dl-t">${formattedDate}</span></li>
-                    <li class="dl-i"><span class="dl-d font-weight-bold">Mode type:</span> 
-                    <span class="dl-t">${
-                      feature.properties.location_type
-                    }</span></li>
+                  <li class="dl-i dl-i--b">
+                    <div class="dl-d">${numFeatures} ${
+            numFeatures > 1 ? 'crashes' : 'crash'
+          }</div>
+                  </li>        
+                  <li class="dl-i dl-i--b">
+                    <div class="dl-t">
+                      ${properties
+                        .map(
+                          crash =>
+                            `${format(crash[1], 'MM-DD-YY')}: ${crash[0]}<br/>`
+                        )
+                        .join('')}
+                    </div>
+                  </li>
                 </ul>
             </div>`
         )
