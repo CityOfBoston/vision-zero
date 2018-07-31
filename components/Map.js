@@ -186,7 +186,7 @@ class MapboxMap extends React.Component {
           ],
           // Increase radius as zoom increases
           'heatmap-radius': {
-            stops: [[12, 1], [16, 15]],
+            stops: [[12, 11], [16, 15]],
           },
           // Decrease opacity to transition into the
           // circle layer
