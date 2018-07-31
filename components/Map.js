@@ -358,7 +358,8 @@ class MapboxMap extends React.Component {
                   </li>
                 </ul>
             </div>`
-        ).setLngLat(features[0].geometry.coordinates)
+        )
+        .setLngLat(features[0].geometry.coordinates)
         .addTo(this.map);
     });
 
