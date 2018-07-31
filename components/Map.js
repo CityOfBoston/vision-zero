@@ -332,7 +332,7 @@ class Map extends React.Component {
           return a[1] > b[1] ? -1 : 1;
         });
 
-      new mapboxgl.Popup({ closeOnClickboolean: true })
+      new mapboxgl.Popup({ closeOnClick: true })
         .setLngLat(features[0].geometry.coordinates)
         // We put the number of crashes at the top of the popup, and
         // for each crash in the array of crashes clicked on,
