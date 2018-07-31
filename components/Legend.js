@@ -7,28 +7,28 @@ export default function Legend() {
       <Card className="mt-1 border-0">
         <Row>
           <img
-            src="./static/marker-11-red.svg"
-            width="30px"
-            height="30px"
-            className="ml-3"
+            src="./static/circle-15-red.svg"
+            width="25px"
+            height="25px"
+            className="ml-3 mr-1"
           />
           <p className="font-italic">Pedestrian crash</p>
         </Row>
         <Row>
           <img
-            src="./static/marker-11-yellow.svg"
-            width="30px"
-            height="30px"
-            className="ml-3"
+            src="./static/circle-15-yellow.svg"
+            width="25px"
+            height="25px"
+            className="ml-3 mr-1"
           />
           <p className="font-italic">Bicyclist crash</p>
         </Row>
         <Row>
           <img
-            src="./static/marker-11-blue.svg"
-            width="30px"
-            height="30px"
-            className="ml-3"
+            src="./static/circle-15-blue.svg"
+            width="25px"
+            height="25px"
+            className="ml-3 mr-1"
           />
           <p className="font-italic">Motor vehicle crash</p>
         </Row>
