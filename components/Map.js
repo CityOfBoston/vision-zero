@@ -27,7 +27,7 @@ class Map extends React.Component {
 
   componentDidMount() {
     // We set up esri-leaflet feature services for crashes and fatalities
-    // that we query against for updating pointCount
+    // that we query against for updating pointCount and lastUpdatedDate
     this.crashFeatureLayer = featureLayer({
       url: crashes_url,
     });
@@ -42,7 +42,7 @@ class Map extends React.Component {
       zoom: 13,
       style: {
         version: 8,
-        // Despite mapbox enabling vector basemap fitiles, we use our own tiled
+        // Despite mapbox enabling vector basemaps, we use our own tiled
         // basemap service to keep with city styling and branding
         sources: {
           'esri-grey': {
@@ -376,7 +376,7 @@ class Map extends React.Component {
   }
 
   componentWillReceiveProps({ modeSelection, fromDate, toDate, dataset }) {
-    // If the selected dataset is 'crash', we ake sure the crashes layers are
+    // If the selected dataset is 'crash', we make sure the crashes layers are
     // visible and the fatalities are not. If the selected dataset is
     // 'fatalities', we do the opposite.
     if (this.props.dataset !== dataset) {
@@ -393,7 +393,7 @@ class Map extends React.Component {
       }
     }
 
-    // Set the filter for mode - mapbox filters are seemlingly case sensitive, so we
+    // Set the filter for mode - mapbox filters are case sensitive, so we
     // make the modeSelection uppercase when dealing with fatalities.
     const modeSelectionFilter =
       dataset == 'crash'
