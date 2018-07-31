@@ -15,7 +15,7 @@ const crashes_url =
 const fatalities_url =
   'https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/fatalities_vision_zero/FeatureServer/0';
 
-class Map extends React.Component {
+class MapboxMap extends React.Component {
   constructor(props) {
     super(props);
 
@@ -358,8 +358,7 @@ class Map extends React.Component {
                   </li>
                 </ul>
             </div>`
-        )
-        .setLngLat(features[0].geometry.coordinates)
+        ).setLngLat(features[0].geometry.coordinates)
         .addTo(this.map);
     });
 
@@ -533,9 +532,9 @@ class Map extends React.Component {
   }
 }
 
-export default Map;
+export default MapboxMap;
 
-Map.propTypes = {
+MapboxMap.propTypes = {
   fromDate: PropTypes.string,
   toDate: PropTypes.string,
   modeSelection: PropTypes.string,
