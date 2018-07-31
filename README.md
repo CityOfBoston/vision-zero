@@ -5,7 +5,8 @@ on the map can be found on the City's open data portal, under [vision zero crash
 and [vision zero fatality records](https://data.boston.gov/dataset/vision-zero-fatality-records).
 
 ## Built with
-- [React](https://reactjs.org/)
-- [Next.js](https://nextjs.org/)
-- [leaflet](https://leafletjs.com/)
-- [esri-leaflet](https://esri.github.io/esri-leaflet/)
+* [React](https://reactjs.org/)
+* [Next.js](https://nextjs.org/)
+* [mapboxGL](https://www.mapbox.com/mapbox-gl-js/api/)
+* [esri-leaflet](https://esri.github.io/esri-leaflet/)
+

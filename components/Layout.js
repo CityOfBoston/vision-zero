@@ -64,7 +64,7 @@ export default class Layout extends React.Component {
             clear: none;
           }
           .dl-d {
-            width: 50%;
+            width: 100%;
           }
           .dl-i {
             padding: 0.2rem !important;

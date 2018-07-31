@@ -5,6 +5,8 @@ import FeatureCounts from '../components/FeatureCounts';
 
 // We can't import these server-side because they require "window"
 const mapboxgl = process.browser ? require('mapbox-gl') : null;
+// Despite using mapboxgl to render the map, we still use esri-leaflet to
+// query to the layer
 const { featureLayer } = process.browser ? require('esri-leaflet') : {};
 
 const crashes_url =
@@ -25,7 +27,7 @@ class MapboxMap extends React.Component {
 
   componentDidMount() {
     // We set up esri-leaflet feature services for crashes and fatalities
-    // that we query against for updating pointCount.
+    // that we query against for updating pointCount and lastUpdatedDate
     this.crashFeatureLayer = featureLayer({
       url: crashes_url,
     });
@@ -40,8 +42,10 @@ class MapboxMap extends React.Component {
       zoom: 13,
       style: {
         version: 8,
+        // Despite mapbox enabling vector basemaps, we use our own tiled
+        // basemap service to keep with city styling and branding
         sources: {
-          'simple-tiles': {
+          'esri-grey': {
             type: 'raster',
             tiles: [
               'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
@@ -58,9 +62,9 @@ class MapboxMap extends React.Component {
         },
         layers: [
           {
-            id: 'simple-tiles',
+            id: 'esri-grey',
             type: 'raster',
-            source: 'simple-tiles',
+            source: 'esri-grey',
             minzoom: 0,
             maxzoom: 20,
           },
@@ -76,35 +80,29 @@ class MapboxMap extends React.Component {
     });
 
     this.map.on('load', () => {
-      // Add crashes source
+      // We add the crashes and fatalities layers as geojson
       this.map.addSource('crashes', {
         type: 'geojson',
         data: `${crashes_url}/query?where=1%3D1&outFields=*&outSR=4326&returnExceededLimitFeatures=true&f=pgeojson`,
       });
 
-      // Add fatalities source
       this.map.addSource('fatalities', {
         type: 'geojson',
         data: `${fatalities_url}/query?where=1%3D1&outFields=*&outSR=4326&returnExceededLimitFeatures=true&f=pgeojson`,
       });
 
-      // Add point layer for crashes
+      // We want the map to show points at higher zoom levels and
+      // a heat map at lower ones, so we add two layers for both
+      // crashes and fatalities - a point layer and a heat layer -
+      // and manipulate their properties so they only show at
+      // certain zoom levels.
       this.map.addLayer({
         id: 'crashes-point',
         type: 'circle',
         source: 'crashes',
         paint: {
-          // Increase the radius of the circle as the zoom level and dbh value increases
-          'circle-radius': {
-            property: 'dbh',
-            type: 'exponential',
-            stops: [
-              [{ zoom: 11, value: 1 }, 5],
-              [{ zoom: 11, value: 62 }, 10],
-              [{ zoom: 22, value: 1 }, 20],
-              [{ zoom: 22, value: 62 }, 50],
-            ],
-          },
+          // We set the circle fill and stroke color based on the
+          // based on the crash's mode type
           'circle-color': {
             property: 'mode_type',
             type: 'categorical',
@@ -116,6 +114,8 @@ class MapboxMap extends React.Component {
             stops: [['ped', '#8e1b11'], ['bike', '#bc7e2b'], ['mv', '#2564b1']],
           },
           'circle-stroke-width': 1,
+          // We set the opacity of the circle layer to fade/appear
+          // between zooms 11 and 12 to make room for our heatmap
           'circle-stroke-opacity': {
             stops: [[11, 0], [12, 1]],
           },
@@ -131,17 +131,8 @@ class MapboxMap extends React.Component {
         type: 'circle',
         source: 'fatalities',
         paint: {
-          // increase the radius of the circle as the zoom level and dbh value increases
-          'circle-radius': {
-            property: 'dbh',
-            type: 'exponential',
-            stops: [
-              [{ zoom: 11, value: 1 }, 5],
-              [{ zoom: 11, value: 62 }, 10],
-              [{ zoom: 22, value: 1 }, 20],
-              [{ zoom: 22, value: 62 }, 50],
-            ],
-          },
+          // We set the circle fill and stroke color based on the
+          // based on the fatality's mode type
           'circle-color': {
             property: 'mode_type',
             type: 'categorical',
@@ -153,6 +144,8 @@ class MapboxMap extends React.Component {
             stops: [['PED', '#8e1b11'], ['BIKE', '#bc7e2b'], ['MV', '#2564b1']],
           },
           'circle-stroke-width': 1,
+          // We set the opacity of the circle layer to fade/appear
+          // between zooms 11 and 12 to make room for our heatmap
           'circle-stroke-opacity': {
             stops: [[11, 0], [12, 1]],
           },
@@ -162,23 +155,18 @@ class MapboxMap extends React.Component {
         },
       });
 
-      // Add heat map for crashes
+      // We add heatmap layers for both the crash and fatality data
       this.map.addLayer({
         id: 'crashes-heat',
         type: 'heatmap',
         source: 'crashes',
         paint: {
-          // increase weight as diameter breast height increases
-          'heatmap-weight': {
-            property: 'dbh',
-            type: 'exponential',
-            stops: [[1, 0], [62, 1]],
-          },
-          // increase intensity as zoom level increases
+          // Increase intensity as zoom level decreases
           'heatmap-intensity': {
-            stops: [[12, 1], [15, 0.1]],
+            stops: [[11, 1], [15, 3]],
           },
-          // assign color values be applied to points depending on their density
+          // Assign color values be applied to points depending
+          // on their density
           'heatmap-color': [
             'interpolate',
             ['linear'],
@@ -200,7 +188,8 @@ class MapboxMap extends React.Component {
           'heatmap-radius': {
             stops: [[12, 11], [16, 15]],
           },
-          // decrease opacity to transition into the circle layer
+          // Decrease opacity to transition into the
+          // circle layer
           'heatmap-opacity': {
             default: 1,
             stops: [[12, 1], [13, 0]],
@@ -214,17 +203,12 @@ class MapboxMap extends React.Component {
         type: 'heatmap',
         source: 'fatalities',
         paint: {
-          // increase weight as diameter breast height increases
-          'heatmap-weight': {
-            property: 'dbh',
-            type: 'exponential',
-            stops: [[1, 0], [62, 1]],
-          },
-          // increase intensity as zoom level increases
+          // Increase intensity as zoom level decreases
           'heatmap-intensity': {
-            stops: [[12, 1], [15, 3]],
+            stops: [[11, 1], [15, 3]],
           },
-          // assign color values be applied to points depending on their density
+          // Assign color values be applied to points depending
+          // on their density
           'heatmap-color': [
             'interpolate',
             ['linear'],
@@ -248,7 +232,8 @@ class MapboxMap extends React.Component {
           'heatmap-radius': {
             stops: [[12, 15], [16, 20]],
           },
-          // decrease opacity to transition into the circle layer
+          // Decrease opacity to transition into the
+          // circle layer
           'heatmap-opacity': {
             default: 1,
             stops: [[12, 1], [13, 0]],
@@ -256,11 +241,12 @@ class MapboxMap extends React.Component {
         },
       });
 
-      // Set fatality layers to off as default
+      // We deafault to having crashes selected, so we set fatality layers
+      // to not be visible to get started
       this.map.setLayoutProperty('fatalities-point', 'visibility', 'none');
       this.map.setLayoutProperty('fatalities-heat', 'visibility', 'none');
 
-      // Set the default date filters
+      // Set the default date filters for crashes
       const defaultFromDateFilter = [
         '>=',
         ['number', ['get', 'dispatch_ts']],
@@ -282,7 +268,7 @@ class MapboxMap extends React.Component {
         defaultToDateFilter,
       ]);
 
-      // Set query for setting initial pointCount
+      // Calculate the initial pointCount value
       const { allModesSelected } = this.props.makeFeaturesQuery(
         this.props.modeSelection,
         this.props.fromDate,
@@ -291,8 +277,8 @@ class MapboxMap extends React.Component {
       );
       this.updatePointCount(allModesSelected, this.props.dataset);
 
-      // Set last updated date
-      // Query for last updated date
+      // We query our crashes feature service to populate
+      // the date the data was lasted updated
       this.crashFeatureLayer
         .query()
         .where('1=1')
@@ -315,26 +301,42 @@ class MapboxMap extends React.Component {
         });
     });
 
-    // Bind pop-ups for layers
+    // Bind pop-ups for crash and fatality points
     this.map.on('click', e => {
+      // Crash and fatalitiy points are often stacked on top of eachother
+      // in the data. We want the pop-ups to show information about all
+      // the crashes that occured in the clicked location.
+
+      // We get the number of features at the clicked location
       const features = this.map.queryRenderedFeatures(e.point);
+      const numFeatures = features.length;
 
       if (!features.length) {
         return;
       }
 
-      const numFeatures = features.length;
-      const feature = features[0];
+      // We determine the datefield to use depending on the
+      // selected dataset
+      const dateField =
+        this.props.dataset == 'crash' ? 'dispatch_ts' : 'date_time';
 
-      const properties = features.map(feature => [
-        feature.properties.mode_type,
-        feature.properties.dispatch_ts,
-      ]);
+      // We get the mode type and the date of each crash at the location
+      const properties = features
+        .map(feature => [
+          feature.properties.mode_type,
+          feature.properties[dateField],
+        ])
+        // We sort crashes listed in the pop-up by most-recent
+        // to least recent
+        .sort((a, b) => {
+          return a[1] > b[1] ? -1 : 1;
+        });
 
-      const crash = numFeatures > 1 ? 'crashes' : 'crash';
-
-      new mapboxgl.Popup({ closeOnClickboolean: true })
-        .setLngLat(feature.geometry.coordinates)
+      new mapboxgl.Popup({ closeOnClick: true })
+        .setLngLat(features[0].geometry.coordinates)
+        // We put the number of crashes at the top of the popup, and
+        // for each crash in the array of crashes clicked on,
+        // we create a new element
         .setHTML(
           `<div style="min-width: 230px">
             <div>
@@ -357,30 +359,26 @@ class MapboxMap extends React.Component {
                 </ul>
             </div>`
         )
-        .setLngLat(feature.geometry.coordinates)
+        .setLngLat(features[0].geometry.coordinates)
         .addTo(this.map);
     });
 
-    // When we scroll over a layer with a tooltip,
-    // change the mouse to a pointer.
+    // When we scroll over a point, change the mouse to a pointer.
     this.map.on('mousemove', e => {
       const features = this.map.queryRenderedFeatures(e.point, {
         layers: ['crashes-point', 'fatalities-point'],
       });
 
-      if (features.length > 0) {
-        this.map.getCanvas().style.cursor =
-          features[0].properties.Name !== null ? 'pointer' : '';
-      } else {
-        this.map.getCanvas().style.cursor = '';
-      }
+      features.length > 0
+        ? (this.map.getCanvas().style.cursor = 'pointer')
+        : (this.map.getCanvas().style.cursor = '');
     });
   }
 
   componentWillReceiveProps({ modeSelection, fromDate, toDate, dataset }) {
-    // If the selected dataset is 'crash', make sure the crashes layers are
+    // If the selected dataset is 'crash', we make sure the crashes layers are
     // visible and the fatalities are not. If the selected dataset is
-    // 'fatalities', do the opposite.
+    // 'fatalities', we do the opposite.
     if (this.props.dataset !== dataset) {
       if (dataset == 'crash') {
         this.map.setLayoutProperty('fatalities-point', 'visibility', 'none');
@@ -395,7 +393,7 @@ class MapboxMap extends React.Component {
       }
     }
 
-    // Set the filter for mode - mapbox filters are seemlingly case sensitive, so we
+    // Set the filter for mode - mapbox filters are case sensitive, so we
     // make the modeSelection uppercase when dealing with fatalities.
     const modeSelectionFilter =
       dataset == 'crash'
@@ -403,6 +401,7 @@ class MapboxMap extends React.Component {
         : ['==', ['string', ['get', 'mode_type']], modeSelection.toUpperCase()];
 
     // Set the filters for the dates - using the time field for each dataset
+    // and a unix timestamp of the selected date
     const fromDateFilter =
       dataset == 'crash'
         ? ['>=', ['number', ['get', 'dispatch_ts']], getTime(fromDate)]
@@ -413,7 +412,7 @@ class MapboxMap extends React.Component {
         : ['<=', ['number', ['get', 'date_time']], getTime(toDate)];
 
     // We use makeFeaturesQuery and updatePointCount to update the total crashes/fatalities
-    // shown on the map. We still use esri-leaflet for this because there isn't a
+    // shown on the map. We still use esri-leaflet for this because there currently isn't a
     // reliable way to query features on a map through mapbox.
     const { allModesSelected, oneModeSelected } = this.props.makeFeaturesQuery(
       modeSelection,
@@ -421,12 +420,14 @@ class MapboxMap extends React.Component {
       toDate,
       dataset
     );
+
     // Determine what dataset has been selected so we can update it accordingly
     const selectedData =
       dataset == 'crash'
         ? ['crashes-point', 'crashes-heat']
         : ['fatalities-point', 'fatalities-heat'];
-    // If the mode, fromDate, toDate, or dataset change, we updated the
+
+    // If the selected mode, fromDate, toDate, or dataset change, we update the
     // data and filters for the selected dataset.
     if (
       this.props.modeSelection !== modeSelection ||
@@ -434,8 +435,8 @@ class MapboxMap extends React.Component {
       this.props.toDate !== toDate ||
       this.props.dataset !== dataset
     ) {
-      // When the modeSelection is 'all', that filter should not be
-      // applied.
+      // When the modeSelection is 'all', that filter should
+      // not be applied to either dataset.
       if (modeSelection == 'all') {
         this.map.setFilter(selectedData[0], [
           'all',
@@ -475,13 +476,13 @@ class MapboxMap extends React.Component {
     // Set the featureLayer to update based on the selected dataset
     const selectedData =
       dataset == 'crash' ? this.crashFeatureLayer : this.fatalityFeatureLayer;
+
+    // Query the layer based on the users selections and
+    // return a count of features, use that count to updated pointCount
     selectedData
-      // Query the layer based on the users selections and
-      // return a list of feature ids
       .query()
       .where(query)
       .count((error, count) => {
-        // Use the length of the returned list to update pointCount
         this.setState({ pointCount: count });
       });
   };
@@ -517,9 +518,7 @@ class MapboxMap extends React.Component {
           style={{ height: 'calc(100vh - 125px)' }}
           ref={el => (this.mapContainer = el)}
         >
-          <div
-            style={{ zIndex: 1000, position: 'absolute', fontFamily: 'Lora' }}
-          >
+          <div style={{ zIndex: 1000, position: 'absolute' }}>
             <FeatureCounts
               pointCount={this.state.pointCount}
               mode={this.formatModeSelection(this.props.modeSelection)}
