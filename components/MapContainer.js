@@ -1,9 +1,9 @@
 import React from 'react';
 import { Col, Row } from 'reactstrap';
 import Filters from '../components/Filters';
-import Map from '../components/Map';
 import Legend from '../components/Legend';
 import { format, subMonths } from 'date-fns';
+import Map from '../components/Map';
 
 class MapContainer extends React.Component {
   constructor(props) {
@@ -50,15 +50,21 @@ class MapContainer extends React.Component {
     // set date field based on selected dataset
     const datefield = dataset == 'crash' ? 'dispatch_ts' : 'date_time';
 
+    // Here we deal with timezones - we set the filter hours to always be
+    // at 5am for the selected day so things look right to us here on the
+    // east coast (except for during daylight savings).
+    const fromDateWithTimeZone = `${fromDate} 05:00:00`;
+    const toDateWithTimeZone = `${toDate} 05:00:00`;
+
     // set query for when all modes are selected (just use dates to filter)
     const allModesSelected = `${datefield} >= 
-      '${fromDate}' AND ${datefield} <= '${toDate}'`;
+      '${fromDateWithTimeZone}' AND ${datefield} <= '${toDateWithTimeZone}'`;
 
     // set query for when one mode is selected
     const oneModeSelected = `mode_type =
       '${modeSelection}' AND 
-      ${datefield} >= '${fromDate}' AND 
-      ${datefield} <= '${toDate}'`;
+      ${datefield} >= '${fromDateWithTimeZone}' AND 
+      ${datefield} <= '${toDateWithTimeZone}'`;
 
     return {
       allModesSelected,
@@ -92,11 +98,11 @@ class MapContainer extends React.Component {
         </Col>
         <Col lg="9" className="p-lg-0 pr-md-5 pl-md-5">
           <Map
+            modeSelection={this.state.modeSelection}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
-            modeSelection={this.state.modeSelection}
-            makeFeaturesQuery={this.makeFeaturesQuery}
             dataset={this.state.dataset}
+            makeFeaturesQuery={this.makeFeaturesQuery}
             updateDate={this.setLastUpdatedDate}
           />
           {/* second instance of the legend component for when 
