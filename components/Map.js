@@ -15,7 +15,7 @@ const crashes_url =
 const fatalities_url =
   'https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/fatalities_vision_zero/FeatureServer/0';
 
-class MapboxMap extends React.Component {
+class Map extends React.Component {
   constructor(props) {
     super(props);
 
@@ -136,12 +136,12 @@ class MapboxMap extends React.Component {
           'circle-color': {
             property: 'mode_type',
             type: 'categorical',
-            stops: [['PED', '#c4291c'], ['BIKE', '#f4ae3d'], ['MV', '#3b90e3']],
+            stops: [['ped', '#c4291c'], ['bike', '#f4ae3d'], ['mv', '#3b90e3']],
           },
           'circle-stroke-color': {
             property: 'mode_type',
             type: 'categorical',
-            stops: [['PED', '#8e1b11'], ['BIKE', '#bc7e2b'], ['MV', '#2564b1']],
+            stops: [['ped', '#8e1b11'], ['bike', '#bc7e2b'], ['mv', '#2564b1']],
           },
           'circle-stroke-width': 1,
           // We set the opacity of the circle layer to fade/appear
@@ -398,7 +398,7 @@ class MapboxMap extends React.Component {
     const modeSelectionFilter =
       dataset == 'crash'
         ? ['==', ['string', ['get', 'mode_type']], modeSelection]
-        : ['==', ['string', ['get', 'mode_type']], modeSelection.toUpperCase()];
+        : ['==', ['string', ['get', 'mode_type']], modeSelection];
 
     // Set the filters for the dates - using the time field for each dataset
     // and a unix timestamp of the selected date
@@ -533,9 +533,9 @@ class MapboxMap extends React.Component {
   }
 }
 
-export default MapboxMap;
+export default Map;
 
-MapboxMap.propTypes = {
+Map.propTypes = {
   fromDate: PropTypes.string,
   toDate: PropTypes.string,
   modeSelection: PropTypes.string,

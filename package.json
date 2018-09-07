@@ -4,6 +4,7 @@
   "description": "",
   "license": "CC0-1.0",
   "scripts": {
+    "dev": "next",
     "build": "next build && next export",
     "deploy": "next build && next export && touch out/.nojekyll && gh-pages -d out --dotfiles"
   },
