@@ -402,14 +402,32 @@ class Map extends React.Component {
 
     // Set the filters for the dates - using the time field for each dataset
     // and a unix timestamp of the selected date
+    // We are explict about times so that users can filter for one day and still
+    // get proper results.
     const fromDateFilter =
       dataset == 'crash'
-        ? ['>=', ['number', ['get', 'dispatch_ts']], getTime(fromDate)]
-        : ['>=', ['number', ['get', 'date_time']], getTime(fromDate)];
+        ? [
+            '>=',
+            ['number', ['get', 'dispatch_ts']],
+            getTime(`${fromDate} 00:00:00`),
+          ]
+        : [
+            '>=',
+            ['number', ['get', 'date_time']],
+            getTime(`${fromDate} 00:00:00`),
+          ];
     const toDateFilter =
       dataset == 'crash'
-        ? ['<=', ['number', ['get', 'dispatch_ts']], getTime(toDate)]
-        : ['<=', ['number', ['get', 'date_time']], getTime(toDate)];
+        ? [
+            '<=',
+            ['number', ['get', 'dispatch_ts']],
+            getTime(`${toDate} 11:59:59`),
+          ]
+        : [
+            '<=',
+            ['number', ['get', 'date_time']],
+            getTime(`${toDate} 11:59:59`),
+          ];
 
     // We use makeFeaturesQuery and updatePointCount to update the total crashes/fatalities
     // shown on the map. We still use esri-leaflet for this because there currently isn't a
