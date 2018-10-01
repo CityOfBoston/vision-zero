@@ -50,11 +50,10 @@ class MapContainer extends React.Component {
     // set date field based on selected dataset
     const datefield = dataset == 'crash' ? 'dispatch_ts' : 'date_time';
 
-    // Here we deal with timezones - we set the filter hours to always be
-    // at 5am for the selected day so things look right to us here on the
-    // east coast (except for during daylight savings).
-    const fromDateWithTimeZone = `${fromDate} 05:00:00`;
-    const toDateWithTimeZone = `${toDate} 05:00:00`;
+    // We have to be explcit about times on fromDate and toDate so that
+    // users can query just one day and still get results.
+    const fromDateWithTimeZone = `${fromDate} 00:00:00`;
+    const toDateWithTimeZone = `${toDate} 11:59:59`;
 
     // set query for when all modes are selected (just use dates to filter)
     const allModesSelected = `${datefield} >= 
