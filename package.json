@@ -9,7 +9,7 @@
     "deploy": "next build && next export && touch out/.nojekyll && gh-pages -d out --dotfiles"
   },
   "dependencies": {
-    "bootstrap": "^4.1.1",
+    "bootstrap": "^4.1.3",
     "date-fns": "^1.29.0",
     "esri-leaflet": "^2.1.4",
     "font-awesome": "^4.7.0",
