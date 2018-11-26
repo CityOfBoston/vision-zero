@@ -108,6 +108,20 @@ export default class AboutPage extends React.Component {
                 Records may be updated after their initial posting if new
                 information becomes available.
               </li>
+              <li>
+                The data includes traffic fatalities that take place on streets
+                that are within the jurisdiction of the Boston Police
+                Department. It does not include traffic fatalities on streets
+                that are within the jurisdiction of the Massachusetts State
+                Police.
+              </li>
+              <li>
+                The following are excluded: fatal crashes that occur on private
+                property or on streets that are not owned by the City of Boston;
+                fatalities due to driver medical emergencies, intentional
+                assault, or suicide; fatalities where the driver or passenger
+                fell out of a car.
+              </li>
             </ul>
 
             <p style={{ fontStyle: 'italic' }}>
