@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row } from 'reactstrap';
 import Filters from '../components/Filters';
 import Legend from '../components/Legend';
-import { format, getYear, addMonths } from 'date-fns';
+import { format, getYear } from 'date-fns';
 import Map from '../components/Map';
 
 class MapContainer extends React.Component {
@@ -132,7 +132,7 @@ const getDefaultDates = () => {
   const today = new Date();
   const thisYear = getYear(today);
   const from = format(new Date(thisYear, 0, 1), 'YYYY-MM-DD');
-  const to = format(addMonths(from, 3), 'YYYY-MM-DD');
+  const to = format(today, 'YYYY-MM-DD');
 
   return {
     fromDate: from,
