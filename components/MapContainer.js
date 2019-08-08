@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row } from 'reactstrap';
 import Filters from '../components/Filters';
 import Legend from '../components/Legend';
-import { format, subMonths } from 'date-fns';
+import { format, getYear } from 'date-fns';
 import Map from '../components/Map';
 
 class MapContainer extends React.Component {
@@ -22,27 +22,37 @@ class MapContainer extends React.Component {
 
   // Update state when dataset selection changes
   datasetChange = dataset => {
-    this.setState({ dataset });
+    this.setState({
+      dataset,
+    });
   };
 
   // Update state when mode selection changes
   filterModes = modeSelection => {
-    this.setState({ modeSelection });
+    this.setState({
+      modeSelection,
+    });
   };
 
   // Update state when fromDate value changes
   filterFromDate = e => {
-    this.setState({ fromDate: e.target.value });
+    this.setState({
+      fromDate: e.target.value,
+    });
   };
 
   // Update state when toDate value changes
   filterToDate = e => {
-    this.setState({ toDate: e.target.value });
+    this.setState({
+      toDate: e.target.value,
+    });
   };
 
   // Set last updated date
   setLastUpdatedDate = mapLastUpdatedDate => {
-    this.setState({ updatedDate: mapLastUpdatedDate });
+    this.setState({
+      updatedDate: mapLastUpdatedDate,
+    });
   };
 
   // Select which features to add to map
@@ -84,17 +94,15 @@ class MapContainer extends React.Component {
             modeChange={this.filterModes}
             dataset={this.state.dataset}
             datasetChange={this.datasetChange}
-          />
+          />{' '}
           <p className="font-italic ml-1">
-            Data updated as of: {this.state.updatedDate}
-          </p>
-          {/* add legend twice - once for when screen is large 
-            and it should display above the map, and once for when 
-            screen is small and it should display below the map */}
+            Data updated as of: {this.state.updatedDate}{' '}
+          </p>{' '}
+          {/* add legend twice - once for when screen is large screen is small and it should display below the map */}{' '}
           <Col className="p-0 d-none d-lg-block">
             <Legend />
-          </Col>
-        </Col>
+          </Col>{' '}
+        </Col>{' '}
         <Col lg="9" className="p-lg-0 pr-md-5 pl-md-5">
           <Map
             modeSelection={this.state.modeSelection}
@@ -103,13 +111,12 @@ class MapContainer extends React.Component {
             dataset={this.state.dataset}
             makeFeaturesQuery={this.makeFeaturesQuery}
             updateDate={this.setLastUpdatedDate}
-          />
-          {/* second instance of the legend component for when 
-          screen is small */}
+          />{' '}
+          {/* second instance of the legend component for when screen is small */}{' '}
           <Col className="d-sm-block d-md-block d-lg-none pl-0">
             <Legend />
-          </Col>
-        </Col>
+          </Col>{' '}
+        </Col>{' '}
       </Row>
     );
   }
@@ -123,10 +130,9 @@ export default MapContainer;
 // "to" is 4 months ago
 const getDefaultDates = () => {
   const today = new Date();
-  const fourMonthsAgo = subMonths(today, 4);
-  const sixMonthsAgo = subMonths(today, 6);
-  const from = format(sixMonthsAgo, 'YYYY-MM-DD');
-  const to = format(fourMonthsAgo, 'YYYY-MM-DD');
+  const thisYear = getYear(today);
+  const from = format(new Date(thisYear, 0, 1), 'YYYY-MM-DD');
+  const to = format(today, 'YYYY-MM-DD');
 
   return {
     fromDate: from,
