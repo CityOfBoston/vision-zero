@@ -96,7 +96,7 @@ class MapContainer extends React.Component {
             datasetChange={this.datasetChange}
           />{' '}
           <p className="font-italic ml-1">
-            Data updated as of: {this.state.updatedDate}{' '}
+            Data updated as of the last day of: {this.state.updatedDate}{' '}
           </p>{' '}
           {/* add legend twice - once for when screen is large screen is small and it should display below the map */}{' '}
           <Col className="p-0 d-none d-lg-block">
