@@ -63,7 +63,7 @@ class MapContainer extends React.Component {
     // We have to be explcit about times on fromDate and toDate so that
     // users can query just one day and still get results.
     const fromDateWithTimeZone = `${fromDate} 00:00:00`;
-    const toDateWithTimeZone = `${toDate} 11:59:59`;
+    const toDateWithTimeZone = `${toDate} 23:59:59`;
 
     // set query for when all modes are selected (just use dates to filter)
     const allModesSelected = `${datefield} >= 
