@@ -421,12 +421,12 @@ class Map extends React.Component {
         ? [
             '<=',
             ['number', ['get', 'dispatch_ts']],
-            getTime(`${toDate} 11:59:59`),
+            getTime(`${toDate} 23:59:59`),
           ]
         : [
             '<=',
             ['number', ['get', 'date_time']],
-            getTime(`${toDate} 11:59:59`),
+            getTime(`${toDate} 23:59:59`),
           ];
 
     // We use makeFeaturesQuery and updatePointCount to update the total crashes/fatalities
