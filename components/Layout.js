@@ -92,7 +92,7 @@ export default class Layout extends React.Component {
         {/* set container div with room for navbar  */}
         <div style={{ minHeight: 'calc(100vh - 125px)' }}>
           <Navbar>
-            <NavbarBrand href="http://www.visionzeroboston.org/">
+            <NavbarBrand href="https://www.visionzeroboston.org/">
               <img
                 src="/vision-zero/static/VisionZeroLogo.png"
                 style={{ width: '10em' }}
@@ -107,7 +107,7 @@ export default class Layout extends React.Component {
                     className="lo-i"
                   />
                 </a>
-                <span className="lo-t">Mayor Kim Janey</span>
+                <span className="lo-t">Mayor Michelle Wu</span>
               </div>
             </div>
           </Navbar>
@@ -179,7 +179,7 @@ export default class Layout extends React.Component {
             <ul className="ft-ll ft-ll--r">
               <li className="ft-ll-i">
                 <a
-                  href="http://www.cityofboston.gov/311/"
+                  href="https://www.cityofboston.gov/311/"
                   className="ft-ll-a lnk--yellow"
                 >
                   <span className="ft-ll-311">BOS:311</span>
