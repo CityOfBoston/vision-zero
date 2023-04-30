@@ -107,7 +107,7 @@ export default class Layout extends React.Component {
                     className="lo-i"
                   />
                 </a>
-                <span className="lo-t">Mayor Kim Janey</span>
+                <span className="lo-t">Mayor Michelle Wu</span>
               </div>
             </div>
           </Navbar>
