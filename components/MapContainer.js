@@ -11,12 +11,14 @@ class MapContainer extends React.Component {
 
     // get default dates to set
     const { fromDate, toDate } = getDefaultDates();
+    const dataLoadedAsOf = getFiveYearsAgo();
     this.state = {
       modeSelection: 'all',
       dataset: 'crash',
       fromDate,
       toDate,
       updatedDate: '',
+      dataLoadedAsOf,
     };
   }
 
@@ -96,7 +98,8 @@ class MapContainer extends React.Component {
             datasetChange={this.datasetChange}
           />{' '}
           <p className="font-italic ml-1">
-            Data updated as of the last day of: {this.state.updatedDate}{' '}
+            Data from {format(this.state.dataLoadedAsOf, 'MM/DD/YYYY')} to the
+            last day of {this.state.updatedDate} can be displayed on the map.{' '}
           </p>{' '}
           {/* add legend twice - once for when screen is large screen is small and it should display below the map */}{' '}
           <Col className="p-0 d-none d-lg-block">
@@ -111,6 +114,7 @@ class MapContainer extends React.Component {
             dataset={this.state.dataset}
             makeFeaturesQuery={this.makeFeaturesQuery}
             updateDate={this.setLastUpdatedDate}
+            dataLoadedAsOf={this.state.dataLoadedAsOf}
           />{' '}
           {/* second instance of the legend component for when screen is small */}{' '}
           <Col className="d-sm-block d-md-block d-lg-none pl-0">
@@ -138,4 +142,9 @@ const getDefaultDates = () => {
     fromDate: from,
     toDate: to,
   };
+};
+
+const getFiveYearsAgo = () => {
+  const fiveYearsAgo = getYear(new Date()) - 5;
+  return `${fiveYearsAgo}-01-01`;
 };
