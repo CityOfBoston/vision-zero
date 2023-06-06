@@ -83,12 +83,12 @@ class Map extends React.Component {
       // We add the crashes and fatalities layers as geojson
       this.map.addSource('crashes', {
         type: 'geojson',
-        data: `${crashes_url}/query?where=1%3D1&outFields=*&outSR=4326&returnExceededLimitFeatures=true&f=pgeojson`,
+        data: `${crashes_url}/query?where=dispatch_ts>='${this.props.dataLoadedAsOf}'&outFields=*&outSR=4326&returnExceededLimitFeatures=true&f=pgeojson`,
       });
 
       this.map.addSource('fatalities', {
         type: 'geojson',
-        data: `${fatalities_url}/query?where=1%3D1&outFields=*&outSR=4326&returnExceededLimitFeatures=true&f=pgeojson`,
+        data: `${fatalities_url}/query?where=date_time>='${this.props.dataLoadedAsOf}'&outFields=*&outSR=4326&returnExceededLimitFeatures=true&f=pgeojson`,
       });
 
       // We want the map to show points at higher zoom levels and
@@ -375,7 +375,12 @@ class Map extends React.Component {
     });
   }
 
-  componentWillReceiveProps({ modeSelection, fromDate, toDate, dataset }) {
+  UNSAFE_componentWillReceiveProps({
+    modeSelection,
+    fromDate,
+    toDate,
+    dataset,
+  }) {
     // If the selected dataset is 'crash', we make sure the crashes layers are
     // visible and the fatalities are not. If the selected dataset is
     // 'fatalities', we do the opposite.
@@ -560,4 +565,5 @@ Map.propTypes = {
   makeFeaturesQuery: PropTypes.func,
   dataset: PropTypes.string,
   updateDate: PropTypes.func,
+  dataLoadedAsOf: PropTypes.string,
 };
