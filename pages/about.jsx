@@ -12,7 +12,7 @@ export default class AboutPage extends React.Component {
               <h2 className="sh-title">Vision Zero Crash Records Map</h2>
             </div>
             <p>
-              <a href="http://visionzeroboston.org">Vision Zero Boston</a> is
+              <a href="https://www.boston.gov/transportation/vision-zero">Vision Zero Boston</a> is
               our commitment to focus the city’s resources on proven strategies
               to eliminate fatal and serious traffic crashes in the city by
               2030. We are inspired by the belief that even one fatality is too
